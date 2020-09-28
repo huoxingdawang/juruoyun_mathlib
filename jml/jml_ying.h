@@ -11,7 +11,9 @@
 #define __JML_YING_H
 #include "jml_ying_config.h"
 #if JML_YING_ENABLE==1
-#include "../jml/jml_include.h"
-
+#include "../jbl/jbl_include.h"
+void		jml_start();
+void		jml_stop();
 #endif
+
 #endif

@@ -9,8 +9,8 @@
 #   See the Mulan PSL v1 for more details.
 CC = gcc
 BITS = -g
-EXLIB = $(JBL_EXLIB) $(JWL_EXLIB)
-complain_re2c = jwl
+EXLIB = $(JBL_EXLIB) $(JML_EXLIB)
+complain_re2c = jml
 ifeq ($(shell uname),Linux)
 	system = linux
 else
@@ -49,3 +49,8 @@ run:
 	exes$(H)test    &&pause
 
 #examples
+matrix :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix.o             examples$(H)matrix.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix2.o            examples$(H)matrix2.c	
+	$(CC) $(BITS) -o exes$(H)matrix            tmp$(H)$(pre)matrix.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix2           tmp$(H)$(pre)matrix2.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)

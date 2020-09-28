@@ -7,12 +7,15 @@
    IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
    PURPOSE.
    See the Mulan PSL v1 for more details.*/
-#ifndef __JML_CONFIG_H
-#define __JML_CONFIG_H
+#ifndef __JBL_MATRIX_CONFIG_H
+#define __JBL_MATRIX_CONFIG_H
+#include "jml_config.h"
+#if JBL_MATRIX_ENABLE==1
+#include "jml_ying.h"
+typedef jbl_uint64 jml_matrix_size_type;
+typedef double jml_matrix_data_type;
+#define JML_MATRIX_PRINT_LINENO	1
 
 
-
-#define JBL_MATRIX_ENABLE		1	//need 
-#define JML_YING_ENABLE			1	//need 
-
+#endif
 #endif

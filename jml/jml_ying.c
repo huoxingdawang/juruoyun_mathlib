@@ -10,5 +10,12 @@
 #include "jml_ying.h"
 #if JML_YING_ENABLE==1
 #include "jml_include.h"
+void jml_start()
+{
 
+}
+void jml_stop()
+{
+
+}
 #endif

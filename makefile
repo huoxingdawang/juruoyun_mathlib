@@ -9,8 +9,8 @@
 #   See the Mulan PSL v1 for more details.
 CC = gcc
 BITS = -g
-EXLIB = $(JBL_EXLIB) $(JWL_EXLIB)
-complain_re2c = jwl
+EXLIB = $(JBL_EXLIB) $(JML_EXLIB)
+complain_re2c = jml
 ifeq ($(shell uname),Linux)
 	system = linux
 else
@@ -49,9 +49,12 @@ run:
 	exes$(H)test    &&pause
 
 #examples
-test2:
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)test2.o             examples$(H)test2.c	
-	$(CC) $(BITS) -o exes$(H)test2            tmp$(H)$(pre)test2.o tmp$(H)$(pre)jwl.a tmp$(H)$(pre)jbl.a $(EXLIB)#   Copyright (c) [2020] juruoyun developer team
+matrix :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix.o             examples$(H)matrix.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix2.o            examples$(H)matrix2.c	
+	$(CC) $(BITS) -o exes$(H)matrix            tmp$(H)$(pre)matrix.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix2           tmp$(H)$(pre)matrix2.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+#   Copyright (c) [2020] juruoyun developer team
 #   Juruoyun basic lib is licensed under the Mulan PSL v1.
 #   You can use this software according to the terms and conditions of the Mulan PSL v1.
 #   You may obtain a copy of Mulan PSL v1 at:
@@ -169,7 +172,9 @@ endif
 ifeq ($(system),windows)
 JML_EXLIB = 
 endif
-jml                       :jml/jml_ying 
+jml                       :jml/jml_matrix jml/jml_ying 
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
+jml/jml_matrix           :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jml_matrix.o     jml$(H)jml_matrix.c        $(JML_EXLIB)
 jml/jml_ying           :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jml_ying.o       jml$(H)jml_ying.c        $(JML_EXLIB)
