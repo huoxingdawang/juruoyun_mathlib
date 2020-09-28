@@ -27,9 +27,8 @@ typedef enum
 typedef struct __jbl_file
 {
 	jbl_gc					gc;		//gc结构
-#if JBL_VAR_ENABLE==1
-	jbl_var_operators *		var_ops;
-#endif
+	jbl_var_ops_define			;
+	jbl_pthread_lock_define		;
 	jbl_string *			dir;
 #if JBL_FILE_CACHE_GB2312NAME==1 && defined(_WIN32)
 	jbl_string *			dir_gb2312;

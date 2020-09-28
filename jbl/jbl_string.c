@@ -76,11 +76,12 @@ jbl_string * jbl_string_new()
 	jbl_string * this=jbl_malloc(sizeof(jbl_string));
 	jbl_gc_init(this);
 	jbl_gc_plus(this);//增加引用计数
+	jbl_var_set_operators(this,&jbl_string_operators);
+	jbl_pthread_lock_init(this);
 	this->len=0;
 	this->h=0;
 	this->size=0;
 	this->s=NULL;
-	jbl_var_set_operators(this,&jbl_string_operators);
 	return this;	
 }
 jbl_string* jbl_string_free(jbl_string *this)
@@ -585,11 +586,6 @@ void __jbl_string_stream_operater(jbl_stream* this,jbl_uint8 flags)
 		}
 		jbl_stream_do(nxt,flags);
 	}
-}
-jbl_string *jbl_string_copy_for_stream(jbl_string *that)
-{
-	if(!that)jbl_exception("NULL POINTER");
-	return jbl_string_copy(jbl_refer_pull(that));
 }
 void jbl_string_update_stream_buf(jbl_stream* this)
 {

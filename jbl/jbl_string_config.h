@@ -28,7 +28,7 @@
 
 #define JBL_STRING_CC_ENABLE						1		//jbl_string_cc.c
 #define JBL_STRING_CC_DEBUG							1		//jbl_string_cc.c
-#define JBL_STRING_CC_INNER_DB_ENABLE				1		//使用内联表
+#define JBL_STRING_CC_INNER_DB_ENABLE				0		//使用内联表
 #define JBL_STRING_CC_OUT_DB_DIR					"jbl/jbl_string_cc_table.db"		//加载表的地址
 
 #endif
