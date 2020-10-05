@@ -24,6 +24,12 @@ jml_matrix* jml_matrix_new(jml_matrix_size_type line,jml_matrix_size_type row)
 	for(jml_matrix_size_type i=0,n=line*row;i<n;this->data[i]=0,++i);
 	return this;
 }
+jml_matrix* jml_matrix_newE(jml_matrix_size_type n)
+{
+	jml_matrix * this=jml_matrix_new(n,n);
+	for(jml_matrix_size_type i=0;i<n;_d(this,i,i)=1,++i);
+	return this;
+}
 jml_matrix *jml_matrix_copy(jml_matrix *that)
 {
 	if(!that)return NULL;
@@ -112,8 +118,8 @@ jml_matrix* jml_matrix_number_multiply(jml_matrix* A,jml_matrix_data_type v)
 }
 jml_matrix* jml_matrix_multiply(jml_matrix* A,jml_matrix* B,jml_matrix* C)
 {
-	if(!A)return jml_matrix_add(B,C);
-	if(!B)return jml_matrix_add(A,C);
+	if(!A)return jml_matrix_add(C,B);
+	if(!B)return jml_matrix_add(C,A);
 	A=jbl_refer_pull(A);
 	B=jbl_refer_pull(B);
 	if(A->row!=B->line)jbl_exception("MATRIX OVREFLOW");
@@ -138,7 +144,19 @@ jml_matrix* jml_matrix_transpose(jml_matrix* A)
 		}
 	return A;
 }
-
+jml_matrix* jml_matrix_pow(jml_matrix* A,jml_matrix* D,jbl_uint64 n)
+{
+	if(!A)return D;
+	A=jbl_refer_pull(A);
+	if(A->line!=A->row)jbl_exception("POW NOT SQUARE MATRIX");
+	jml_matrix *B=jml_matrix_newE(A->line),*C=B;
+	while(n--)
+		C=jml_matrix_multiply(B,A,NULL),B=jml_matrix_free(B),B=C;
+	if(!D)return B;
+	D=jml_matrix_add(D,B);
+	B=jml_matrix_free(B);
+	return D;
+}
 
 
 #if JBL_STREAM_ENABLE==1
@@ -162,7 +180,7 @@ jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 forma
 		jbl_stream_push_uint(out,i),jbl_stream_push_char(out,'\t');		
 #endif		
 		for(jml_matrix_size_type j=0;j<thi->row;++j)
-			jbl_stream_push_double(out,_d(thi,i,j)),jbl_stream_push_char(out,'\t');
+			jml_matrix_data_push(out,_d(thi,i,j)),jbl_stream_push_char(out,'\t');
 		jbl_stream_push_char(out,'\n');
 	}
 	return this;

@@ -50,7 +50,9 @@ run:
 
 #examples
 matrix :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix.o             examples$(H)matrix.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix0.o            examples$(H)matrix0.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix1.o            examples$(H)matrix1.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix2.o            examples$(H)matrix2.c	
-	$(CC) $(BITS) -o exes$(H)matrix            tmp$(H)$(pre)matrix.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix0           tmp$(H)$(pre)matrix0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix1           tmp$(H)$(pre)matrix1.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix2           tmp$(H)$(pre)matrix2.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)

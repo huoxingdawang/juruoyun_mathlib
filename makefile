@@ -50,9 +50,11 @@ run:
 
 #examples
 matrix :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix.o             examples$(H)matrix.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix0.o            examples$(H)matrix0.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix1.o            examples$(H)matrix1.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix2.o            examples$(H)matrix2.c	
-	$(CC) $(BITS) -o exes$(H)matrix            tmp$(H)$(pre)matrix.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix0           tmp$(H)$(pre)matrix0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix1           tmp$(H)$(pre)matrix1.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix2           tmp$(H)$(pre)matrix2.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 #   Copyright (c) [2020] juruoyun developer team
 #   Juruoyun basic lib is licensed under the Mulan PSL v1.
@@ -65,12 +67,12 @@ matrix :
 #   See the Mulan PSL v1 for more details.
 #jbl
 ifeq ($(system),linux)
-JBL_EXLIB = -lpthread
+JBL_EXLIB = 
 endif
 ifeq ($(system),windows)
 JBL_EXLIB = 
 endif
-jbl                       :jbl/jbl_aes jbl/jbl_array jbl/jbl_base64 jbl/jbl_bitset jbl/jbl_cmd jbl/jbl_exception jbl/jbl_endian jbl/jbl_file jbl/jbl_gc jbl/jbl_ht jbl/jbl_json jbl/jbl_ll jbl/jbl_log jbl/jbl_malloc jbl/jbl_md5 jbl/jbl_pthread jbl/jbl_rand jbl/jbl_scanner jbl/jbl_sha1 jbl/jbl_stream jbl/jbl_string jbl/jbl_time jbl/jbl_var jbl/jbl_ying 
+jbl                       :jbl/jbl_aes jbl/jbl_array jbl/jbl_base64 jbl/jbl_bitset jbl/jbl_cmd jbl/jbl_exception jbl/jbl_endian jbl/jbl_file jbl/jbl_gc jbl/jbl_ht jbl/jbl_json jbl/jbl_ll jbl/jbl_log jbl/jbl_malloc jbl/jbl_md5 jbl/jbl_rand jbl/jbl_scanner jbl/jbl_sha1 jbl/jbl_stream jbl/jbl_string jbl/jbl_time jbl/jbl_var jbl/jbl_ying 
 	ar  rc tmp$(H)$(pre)jbl.a tmp$(H)$(pre)jbl_*.o
 jbl/jbl_aes            :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_aes.o         jbl$(H)jbl_aes.c         $(JBL_EXLIB)
@@ -116,8 +118,6 @@ jbl/jbl_malloc         :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_malloc_fast.o jbl$(H)jbl_malloc_fast.c $(JBL_EXLIB)
 jbl/jbl_md5            :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_md5.o         jbl$(H)jbl_md5.c         $(JBL_EXLIB)
-jbl/jbl_pthread        :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_pthread.o     jbl$(H)jbl_pthread.c     $(JBL_EXLIB)
 jbl/jbl_rand           :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_rand.o        jbl$(H)jbl_rand.c        $(JBL_EXLIB)
 jbl/jbl_scanner           :
