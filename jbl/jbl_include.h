@@ -26,7 +26,6 @@
 #include "jbl_log.h"
 #include "jbl_malloc.h"
 #include "jbl_md5.h"
-#include "jbl_pthread.h"
 #include "jbl_rand.h"
 #include "jbl_scanner.h"
 #include "jbl_sha1.h"

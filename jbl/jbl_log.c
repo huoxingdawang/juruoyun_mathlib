@@ -13,45 +13,26 @@
 #include "jbl_var.h"
 #include "jbl_string.h"
 #include "jbl_file.h"
-#include "jbl_pthread.h"
 #include <stdarg.h>
-static struct
+struct
 {
 	jbl_uint32 cnt;
 	jbl_uint32 pcnt;
 	jbl_uint8 start;	
-	struct
-	{
-		const char * file;
-		const char * func;
-		jbl_uint32 line;
-	#if JBL_TIME_ENABLE==1
-		jbl_time t;
-	#endif
-		unsigned char * chars;
-	}d[JBL_LOG_MAX_LENGTH];
-	union
-	{
-		jbl_uint64 u;
-		jbl_uint32 i;
-		double d;
-		char c;
-		char* s;
-		void *v;
-	}p[JBL_LOG_MAX_LENGTH*4];
-#if JBL_STREAM_ENABLE==1 && JBL_FILE_ENABLE ==1
+	jbl_log_struct d[JBL_LOG_MAX_LENGTH];
+	jbl_log_parameter_struct p[JBL_LOG_MAX_LENGTH*4];
+	
+	
+	
 	jbl_stream* fs;
-#endif
-	jbl_pthread_lock_define		;
 }__jbl_logs;
 
-static void __jbl_log_save(jbl_uint8 lock);
+
 void jbl_log_start()
 {
 	__jbl_logs.cnt=0;
 	__jbl_logs.start=1;
 	__jbl_logs.pcnt=0;
-	jbl_pthread_lock_init(&__jbl_logs);
 #if JBL_TIME_ENABLE==1
 	for(jbl_uint32 i=0;i<JBL_LOG_MAX_LENGTH;++i)
 		jbl_time_init(&__jbl_logs.d[i].t);
@@ -59,17 +40,14 @@ void jbl_log_start()
 }
 void jbl_log_stop()
 {
-	__jbl_log_save(1);
-#if JBL_STREAM_ENABLE==1 && JBL_FILE_ENABLE ==1
+	jbl_log_save();
 	jbl_stream_do(__jbl_logs.fs,jbl_stream_force);
 	__jbl_logs.fs=jbl_stream_free(__jbl_logs.fs);
-#endif
 }
 
 void jbl_log_add_log(const char * file,const char * func,jbl_uint32 line,unsigned char *s,...)
 {
 	if(!__jbl_logs.start)return;
-	jbl_pthread_lock_wrlock(&__jbl_logs);
 	__jbl_logs.d[__jbl_logs.cnt].file=file;
 	__jbl_logs.d[__jbl_logs.cnt].func=func;
 	__jbl_logs.d[__jbl_logs.cnt].line=line;
@@ -89,7 +67,6 @@ void jbl_log_add_log(const char * file,const char * func,jbl_uint32 line,unsigne
 			case JBL_SCANNER_KEY_CHAR					:__jbl_logs.p[__jbl_logs.pcnt].c=va_arg(arg_ptr,int)		;++__jbl_logs.pcnt	;break;//类型提升
 			case JBL_SCANNER_KEY_CHARS					:__jbl_logs.p[__jbl_logs.pcnt].s=va_arg(arg_ptr,char *)		;++__jbl_logs.pcnt	;break;
 			case JBL_SCANNER_KEY_HEX					:__jbl_logs.p[__jbl_logs.pcnt].u=va_arg(arg_ptr,jbl_uint64)	;++__jbl_logs.pcnt	;break;
-			case JBL_SCANNER_KEY_ERRSTR					:__jbl_logs.p[__jbl_logs.pcnt].u=va_arg(arg_ptr,jbl_uint64)	;++__jbl_logs.pcnt	;break;
 #if JBL_VAR_ENABLE == 1
 			case JBL_SCANNER_KEY_VAR					:__jbl_logs.p[__jbl_logs.pcnt].v=jbl_var_copy(va_arg(arg_ptr,void*))	;++__jbl_logs.pcnt	;break;
 			case JBL_SCANNER_KEY_JSON					:__jbl_logs.p[__jbl_logs.pcnt].v=jbl_var_copy(va_arg(arg_ptr,void*))	;++__jbl_logs.pcnt	;break;
@@ -102,20 +79,21 @@ void jbl_log_add_log(const char * file,const char * func,jbl_uint32 line,unsigne
 	jbl_time_now(&__jbl_logs.d[__jbl_logs.cnt].t);
 #endif
 	++__jbl_logs.cnt;
-	if((__jbl_logs.cnt+10)>=JBL_LOG_MAX_LENGTH||(__jbl_logs.pcnt+40)>=JBL_LOG_MAX_LENGTH*4)
-		__jbl_log_save(0);
-	jbl_pthread_lock_unlock(&__jbl_logs);
+	if((__jbl_logs.cnt+10)>=JBL_LOG_MAX_LENGTH)
+		jbl_log_save();
+	else if((__jbl_logs.pcnt+40)>=JBL_LOG_MAX_LENGTH*4)
+		jbl_log_save();
 }
 #include <stdio.h>
 
 
-static void __jbl_log_save(jbl_uint8 lock)
-{
-	if(lock)jbl_pthread_lock_wrlock(&__jbl_logs);
+void jbl_log_save()
+{	
 	if((__jbl_logs.start&0x02))return;
 	__jbl_logs.start|=0x02;
-#if JBL_STREAM_ENABLE==1 && JBL_FILE_ENABLE ==1
+	jbl_log(UC "Saving logs");
 	if(!__jbl_logs.fs)__jbl_logs.fs=jbl_file_stream_new(jbl_file_open_chars(NULL,UC JBL_LOG_DIR,JBL_FILE_WRITE));
+#if JBL_STREAM_ENABLE==1
 	jbl_uint32 j=0;
 	for(jbl_uint32 i=0;i<__jbl_logs.cnt;++i)
 	{
@@ -134,15 +112,14 @@ static void __jbl_log_save(jbl_uint8 lock)
 			jbl_scanner_key key=jbl_scanner(s,&s);
 			switch(key)
 			{
-				case JBL_SCANNER_KEY_UNDEFINED				:jbl_stream_push_char(__jbl_logs.fs,*(s-1))											;break;
-				case JBL_SCANNER_KEY_END					:goto finish																		;break;
-				case JBL_SCANNER_KEY_INT					:jbl_stream_push_int	(__jbl_logs.fs,__jbl_logs.p[j].i)					;++j	;break;
-				case JBL_SCANNER_KEY_UINT					:jbl_stream_push_uint	(__jbl_logs.fs,__jbl_logs.p[j].u)					;++j	;break;
-				case JBL_SCANNER_KEY_DOUBLE					:jbl_stream_push_double	(__jbl_logs.fs,__jbl_logs.p[j].d)					;++j	;break;
-				case JBL_SCANNER_KEY_CHAR					:jbl_stream_push_char	(__jbl_logs.fs,__jbl_logs.p[j].c)					;++j	;break;
-				case JBL_SCANNER_KEY_HEX					:jbl_stream_push_hex	(__jbl_logs.fs,__jbl_logs.p[j].u)					;++j	;break;
-				case JBL_SCANNER_KEY_CHARS					:jbl_stream_push_chars	(__jbl_logs.fs,UC __jbl_logs.p[j].s)				;++j	;break;
-				case JBL_SCANNER_KEY_ERRSTR					:jbl_stream_push_chars	(__jbl_logs.fs,jbl_errno_table[__jbl_logs.p[j].u])	;++j	;break;
+				case JBL_SCANNER_KEY_UNDEFINED				:jbl_stream_push_char(__jbl_logs.fs,*(s-1))									;break;
+				case JBL_SCANNER_KEY_END					:goto finish																;break;
+				case JBL_SCANNER_KEY_INT					:jbl_stream_push_int	(__jbl_logs.fs,__jbl_logs.p[j].i)			;++j	;break;
+				case JBL_SCANNER_KEY_UINT					:jbl_stream_push_uint	(__jbl_logs.fs,__jbl_logs.p[j].u)			;++j	;break;
+				case JBL_SCANNER_KEY_DOUBLE					:jbl_stream_push_double	(__jbl_logs.fs,__jbl_logs.p[j].d)			;++j	;break;
+				case JBL_SCANNER_KEY_CHAR					:jbl_stream_push_char	(__jbl_logs.fs,__jbl_logs.p[j].c)			;++j	;break;
+				case JBL_SCANNER_KEY_HEX					:jbl_stream_push_hex	(__jbl_logs.fs,__jbl_logs.p[j].u)			;++j	;break;
+				case JBL_SCANNER_KEY_CHARS					:jbl_stream_push_chars	(__jbl_logs.fs,UC __jbl_logs.p[j].s)		;++j	;break;
 #if JBL_VAR_ENABLE == 1
 				case JBL_SCANNER_KEY_VAR					:jbl_stream_push_char	(__jbl_logs.fs,'\n');jbl_var_view_put(__jbl_logs.p[j].v,__jbl_logs.fs,1,JBL_VIEW_DEFAULT_TABS,0,NULL,NULL,NULL)	;__jbl_logs.p[j].v=jbl_var_free(__jbl_logs.p[j].v)	;++j	;break;
 				case JBL_SCANNER_KEY_JSON					:
@@ -165,7 +142,6 @@ static void __jbl_log_save(jbl_uint8 lock)
 	__jbl_logs.start&=(~0x02);
 	__jbl_logs.cnt=0;
 	__jbl_logs.pcnt=0;
-	if(lock)jbl_pthread_lock_unlock(&__jbl_logs);
 }
 
 #endif
