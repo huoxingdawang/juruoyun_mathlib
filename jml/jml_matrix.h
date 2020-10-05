@@ -23,19 +23,26 @@ typedef struct __jml_matrix
 	jml_matrix_size_type		row;
 	jml_matrix_data_type		data[];
 }jml_matrix;
-jml_matrix *	jml_matrix_new				(jml_matrix_size_type line,jml_matrix_size_type row);	//新建一个矩阵
-jml_matrix *	jml_matrix_newE				(jml_matrix_size_type n);								//新建一个n行n列单位阵
-jml_matrix *	jml_matrix_copy				(jml_matrix *that);										//复制一个矩阵
-jml_matrix *	jml_matrix_free				(jml_matrix *this);										//释放一个矩阵
-#define			jml_matrix_extend(a,b,c)	jml_matrix_extend_to((a),(b),(c),1,NULL)				//将矩阵修改为b*c大小(多于部分直接丢弃，不足补零)
-jml_matrix *	jml_matrix_extend_to		(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jbl_uint8 small,jml_matrix **pth);							//扩展字符串this到size字节
-jml_matrix *	jml_matrix_add				(jml_matrix* A,jml_matrix* B);
-jml_matrix *	jml_matrix_minus			(jml_matrix* A,jml_matrix* B);
-jml_matrix *	jml_matrix_negative			(jml_matrix* A);
-jml_matrix *	jml_matrix_number_multiply	(jml_matrix* A,jml_matrix_data_type v);
-jml_matrix *	jml_matrix_multiply			(jml_matrix* A,jml_matrix* B,jml_matrix* C);
-jml_matrix *	jml_matrix_transpose		(jml_matrix* A);
-jml_matrix *	jml_matrix_pow				(jml_matrix* A,jml_matrix* D,jbl_uint64 n);
+jml_matrix *	jml_matrix_new					(jml_matrix_size_type line,jml_matrix_size_type row);	//新建一个矩阵
+jml_matrix *	jml_matrix_newE					(jml_matrix_size_type n);								//新建一个n行n列单位阵
+jml_matrix *	jml_matrix_copy					(jml_matrix *that);										//复制一个矩阵
+jml_matrix *	jml_matrix_free					(jml_matrix *this);										//释放一个矩阵
+#define			jml_matrix_extend(a,b,c)		jml_matrix_extend_to((a),(b),(c),1,NULL)				//将矩阵修改为b*c大小(多于部分直接丢弃，不足补零)
+jml_matrix *	jml_matrix_extend_to			(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jbl_uint8 small,jml_matrix **pth);							//扩展字符串this到size字节
+jml_matrix *	jml_matrix_add					(jml_matrix* A,jml_matrix* B);
+jml_matrix *	jml_matrix_minus				(jml_matrix* A,jml_matrix* B);
+jml_matrix *	jml_matrix_negative				(jml_matrix* A);
+jml_matrix *	jml_matrix_number_multiply		(jml_matrix* A,jml_matrix_data_type v);
+jml_matrix *	jml_matrix_multiply				(jml_matrix* A,jml_matrix* B,jml_matrix* C);
+jml_matrix *	jml_matrix_transpose			(jml_matrix* A);
+jml_matrix *	jml_matrix_pow					(jml_matrix* A,jml_matrix* D,jbl_uint64 n);
+char			jml_matrix_space_ship			(jml_matrix *this,jml_matrix *that);					//比较两个矩阵
+#define			jml_matrix_if_equal(x,y)		(jml_matrix_space_ship(x,y)==0)							//判断this是否=that
+#define			jml_matrix_if_big(x,y)			(jml_matrix_space_ship(x,y)>0)							//判断this是否>that
+#define			jml_matrix_if_small(x,y)		(jml_matrix_space_ship(x,y)<0)							//判断this是否<that
+#define			jml_matrix_if_equal_small(x,y)	(jml_matrix_space_ship(x,y)<=0)							//判断this是否>=that
+#define			jml_matrix_if_equal_big(x,y)	(jml_matrix_space_ship(x,y)>=0)							//判断this是否<=that
+
 
 jml_matrix_data_type	jml_matrix_get			(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row);
 jml_matrix *	jml_matrix_set				(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jml_matrix_data_type v);

@@ -22,6 +22,9 @@ int main()
 	jml_matrix_view(m4);
 	jml_matrix_view(m5);
 	jml_matrix_view(m6);
+	
+	puint(jml_matrix_if_equal(m2,mE));pn();
+	puint(jml_matrix_if_equal(m3,mE));pn();
 
 
 

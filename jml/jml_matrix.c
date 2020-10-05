@@ -9,7 +9,7 @@
    See the Mulan PSL v1 for more details.*/
 #include "jml_matrix.h"
 #if JBL_MATRIX_ENABLE==1
-jbl_var_operators_new(jml_matrix_operators,jml_matrix_free,jml_matrix_copy,NULL,NULL,NULL,NULL);
+jbl_var_operators_new(jml_matrix_operators,jml_matrix_free,jml_matrix_copy,jml_matrix_space_ship,NULL,NULL,NULL);
 #define _d(this,l,r)		(*(this->data+l*this->row+r))
 #define _f(this,i,j)		for(jml_matrix_size_type i=0;i<this->line;++i)for(jml_matrix_size_type j=0;j<this->row;++j)
 #define _ff(this,i,j,l,r)	for(jml_matrix_size_type i=0;i<l;++i)for(jml_matrix_size_type j=0;j<r;++j)
@@ -156,6 +156,20 @@ jml_matrix* jml_matrix_pow(jml_matrix* A,jml_matrix* D,jbl_uint64 n)
 	D=jml_matrix_add(D,B);
 	B=jml_matrix_free(B);
 	return D;
+}
+char jml_matrix_space_ship(jml_matrix *this,jml_matrix *that)
+{
+	jml_matrix *thi=jbl_refer_pull(this);	
+	jml_matrix *tha=jbl_refer_pull(that);	
+	if(thi==tha){return 0;}if(thi==NULL){return -1;}if(tha==NULL){return 1;}	
+	if(thi->line*thi->row!=tha->line*tha->row)
+		return (thi->line*thi->row<tha->line*tha->row)?-1:1;
+	for(jbl_string_size_type i=0,n=thi->line*thi->row;i<n;++i)
+		if(thi->data[i]<tha->data[i])
+			return -1;
+		else if(thi->data[i]>tha->data[i])
+			return 1;
+	return 0;	
 }
 
 
