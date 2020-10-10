@@ -15,10 +15,8 @@
 typedef struct __jml_matrix
 {
 	jbl_gc						gc;
-#if JBL_VAR_ENABLE==1
-	jbl_var_operators *		var_ops;
-#endif
-//	jbl_pthread_lock_define		;
+	jbl_var_ops_define			;
+	jbl_pthread_lock_define		;
 	jml_matrix_size_type		line;
 	jml_matrix_size_type		row;
 	jml_matrix_data_type		data[];
@@ -29,6 +27,7 @@ jml_matrix *	jml_matrix_copy					(jml_matrix *that);										//复制一个矩�
 jml_matrix *	jml_matrix_free					(jml_matrix *this);										//释放一个矩阵
 #define			jml_matrix_extend(a,b,c)		jml_matrix_extend_to((a),(b),(c),1,NULL)				//将矩阵修改为b*c大小(多于部分直接丢弃，不足补零)
 jml_matrix *	jml_matrix_extend_to			(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jbl_uint8 small,jml_matrix **pth);							//扩展字符串this到size字节
+jml_matrix *	jml_matrix_set					(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jml_matrix_data_type v);
 jml_matrix *	jml_matrix_add					(jml_matrix* A,jml_matrix* B);
 jml_matrix *	jml_matrix_minus				(jml_matrix* A,jml_matrix* B);
 jml_matrix *	jml_matrix_negative				(jml_matrix* A);
@@ -45,8 +44,6 @@ char			jml_matrix_space_ship			(jml_matrix *this,jml_matrix *that);					//比较
 
 
 jml_matrix_data_type	jml_matrix_get			(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row);
-jml_matrix *	jml_matrix_set				(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jml_matrix_data_type v);
-
 
 #if JBL_STREAM_ENABLE==1
 jml_matrix*				jml_matrix_view_put						(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file);	//从out浏览一个字符串

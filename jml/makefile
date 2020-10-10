@@ -17,6 +17,6 @@ endif
 jml                       :jml/jml_matrix jml/jml_ying 
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
 jml/jml_matrix           :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jml_matrix.o     jml$(H)jml_matrix.c        $(JML_EXLIB)
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o     jml$(H)jml_matrix.c        $(JML_EXLIB)
 jml/jml_ying           :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jml_ying.o       jml$(H)jml_ying.c        $(JML_EXLIB)
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o       jml$(H)jml_ying.c        $(JML_EXLIB)

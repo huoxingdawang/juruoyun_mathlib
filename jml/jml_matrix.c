@@ -82,6 +82,7 @@ jml_matrix *jml_matrix_set(jml_matrix *this,jml_matrix_size_type line,jml_matrix
 	_d(thi,line,row)=v;	
 	return this;
 }
+
 jml_matrix* jml_matrix_add(jml_matrix* A,jml_matrix* B)
 {
 	if(!B)return A;
@@ -171,8 +172,6 @@ char jml_matrix_space_ship(jml_matrix *this,jml_matrix *that)
 			return 1;
 	return 0;	
 }
-
-
 #if JBL_STREAM_ENABLE==1
 jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)
 {
@@ -182,14 +181,14 @@ jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 forma
 	jbl_stream_push_char(out,'\n');
 	++tabs;
 #if JML_MATRIX_PRINT_LINENO ==1
-	for(jbl_int32 j=0;j<tabs+1;jbl_stream_push_char(out,'\t'),++j);
+	for(jbl_uint32 j=0;j<tabs+1;jbl_stream_push_char(out,'\t'),++j);
 	for(jml_matrix_size_type j=0;j<thi->row;++j)
 		jbl_stream_push_uint(out,j),jbl_stream_push_char(out,'\t');		
 	jbl_stream_push_char(out,'\n');
 #endif		
 	for(jml_matrix_size_type i=0;i<thi->line;++i)
 	{
-		for(jbl_int32 j=0;j<tabs;jbl_stream_push_char(out,'\t'),++j);
+		for(jbl_uint32 j=0;j<tabs;jbl_stream_push_char(out,'\t'),++j);
 #if JML_MATRIX_PRINT_LINENO ==1
 		jbl_stream_push_uint(out,i),jbl_stream_push_char(out,'\t');		
 #endif		
