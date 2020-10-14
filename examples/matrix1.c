@@ -12,11 +12,11 @@ int main()
 	jml_matrix_view(m1);
 	jml_matrix* mE=jml_matrix_newE(3);
 	jml_matrix_view(mE);
-	jml_matrix* m2=jml_matrix_pow(m1,NULL,0);
-	jml_matrix* m3=jml_matrix_pow(m1,NULL,1);
-	jml_matrix* m4=jml_matrix_pow(m1,NULL,2);
-	jml_matrix* m5=jml_matrix_pow(m1,NULL,3);
-	jml_matrix* m6=jml_matrix_pow(m1,NULL,4);
+	jml_matrix* m2=jml_matrix_pow(m1,0);
+	jml_matrix* m3=jml_matrix_pow(m1,1);
+	jml_matrix* m4=jml_matrix_pow(m1,2);
+	jml_matrix* m5=jml_matrix_pow(m1,3);
+	jml_matrix* m6=jml_matrix_pow(m1,4);
 	jml_matrix_view(m2);
 	jml_matrix_view(m3);
 	jml_matrix_view(m4);

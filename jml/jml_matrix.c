@@ -9,6 +9,7 @@
    See the Mulan PSL v1 for more details.*/
 #include "jml_matrix.h"
 #if JBL_MATRIX_ENABLE==1
+#include "jml_permutation.h"
 jbl_var_operators_new(jml_matrix_operators,jml_matrix_free,jml_matrix_copy,jml_matrix_space_ship,NULL,NULL,NULL);
 #define _d(this,l,r)		(*(this->data+l*this->row+r))
 #define _f(this,i,j)		for(jml_matrix_size_type i=0;i<this->line;++i)for(jml_matrix_size_type j=0;j<this->row;++j)
@@ -96,7 +97,7 @@ jml_matrix* jml_matrix_add(jml_matrix* A,jml_matrix* B)
 jml_matrix* jml_matrix_minus(jml_matrix* A,jml_matrix* B)
 {
 	if(!B)return A;
-	if(!A)return jml_matrix_copy(B);
+	if(!A)return jml_matrix_negative(jml_matrix_copy(B));
 	B=jbl_refer_pull(B);
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
 	if(a->line!=B->line||a->row!=B->row)jbl_exception("MATRIX OVREFLOW");
@@ -117,18 +118,17 @@ jml_matrix* jml_matrix_number_multiply(jml_matrix* A,jml_matrix_data_type v)
 	_f(a,i,j)_d(a,i,j)=_d(a,i,j)*v;
 	return A;
 }
-jml_matrix* jml_matrix_multiply(jml_matrix* A,jml_matrix* B,jml_matrix* C)
+jml_matrix* jml_matrix_multiply(jml_matrix* A,jml_matrix* B)
 {
-	if(!A)return jml_matrix_add(C,B);
-	if(!B)return jml_matrix_add(C,A);
+	if(!A||!B)return NULL;
 	A=jbl_refer_pull(A);
 	B=jbl_refer_pull(B);
 	if(A->row!=B->line)jbl_exception("MATRIX OVREFLOW");
-	jml_matrix *c;C=jml_matrix_extend_to(C,A->line,B->row,1,&c);
+	jml_matrix *C=jml_matrix_new(A->line,B->row);
 	for(jml_matrix_size_type i=0;i<A->line;++i)
 		for(jml_matrix_size_type j=0;j<B->row;++j)
 			for(jml_matrix_size_type k=0;k<B->line;++k)
-				_d(c,i,j)+=_d(A,i,k)*_d(B,k,j);
+				_d(C,i,j)+=_d(A,i,k)*_d(B,k,j);
 	return C;
 }
 jml_matrix* jml_matrix_transpose(jml_matrix* A)
@@ -145,18 +145,15 @@ jml_matrix* jml_matrix_transpose(jml_matrix* A)
 		}
 	return A;
 }
-jml_matrix* jml_matrix_pow(jml_matrix* A,jml_matrix* D,jbl_uint64 n)
+jml_matrix* jml_matrix_pow(jml_matrix* A,jbl_uint64 n)
 {
-	if(!A)return D;
+	if(!A)return NULL;
 	A=jbl_refer_pull(A);
 	if(A->line!=A->row)jbl_exception("POW NOT SQUARE MATRIX");
-	jml_matrix *B=jml_matrix_newE(A->line),*C=B;
+	jml_matrix *B=jml_matrix_newE(A->line),*C=NULL;
 	while(n--)
-		C=jml_matrix_multiply(B,A,NULL),B=jml_matrix_free(B),B=C;
-	if(!D)return B;
-	D=jml_matrix_add(D,B);
-	B=jml_matrix_free(B);
-	return D;
+		C=jml_matrix_multiply(B,A),B=jml_matrix_free(B),B=C;
+	return B;
 }
 char jml_matrix_space_ship(jml_matrix *this,jml_matrix *that)
 {
@@ -171,6 +168,42 @@ char jml_matrix_space_ship(jml_matrix *this,jml_matrix *that)
 		else if(thi->data[i]>tha->data[i])
 			return 1;
 	return 0;	
+}
+jml_matrix *jml_matrix_minor(jml_matrix *A,jml_matrix_size_type line,jml_matrix_size_type row)
+{
+	if(!A)return NULL;
+	A=jbl_refer_pull(A);
+	if(line>=A->line||row>=A->row)return NULL;
+	jml_matrix *C=jml_matrix_new(A->line-1,A->row-1);
+	for(jml_matrix_size_type i=0,ii=0;i<A->line;++i)
+		if(i!=line)
+		{
+			for(jml_matrix_size_type j=0,jj=0;j<A->row;++j)
+				if(j!=row)
+					_d(C,ii,jj)=_d(A,i,j),++jj;
+			++ii;
+		}
+	return C;
+}
+jml_matrix *jml_matrix_cofactor(jml_matrix *A,jml_matrix_size_type line,jml_matrix_size_type row)
+{
+	return ((line+row)&1)?jml_matrix_negative(jml_matrix_minor(A,line,row)):jml_matrix_minor(A,line,row);
+}
+jml_matrix_data_type jml_matrix_determinant(jml_matrix *A)
+{
+	if(!A)return 0;
+	A=jbl_refer_pull(A);
+	if(A->line!=A->row)jbl_exception("DETERMINANT NOT SQUARE MATRIX");
+	jml_permutation* p1=jml_permutation_new(A->row);
+	jml_matrix_data_type result=0;
+	do
+	{
+		jml_matrix_data_type temp=p1->ji?-1:1;
+		for(jml_matrix_size_type i=0,j=0;j<A->row;temp*=_d(A,i,p1->data[j]),++i,++j);
+		result+=temp;
+	}while(jml_permutation_next(p1));
+	p1=jml_permutation_free(p1);
+	return result;
 }
 #if JBL_STREAM_ENABLE==1
 jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)

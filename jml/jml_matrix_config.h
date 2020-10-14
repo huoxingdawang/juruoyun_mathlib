@@ -13,8 +13,8 @@
 #if JBL_MATRIX_ENABLE==1
 #include "jml_ying.h"
 typedef jbl_uint64 jml_matrix_size_type;
-typedef jbl_uint64 jml_matrix_data_type;
-#define jml_matrix_data_push	jbl_stream_push_uint
+typedef jbl_int64 jml_matrix_data_type;
+#define jml_matrix_data_push	jbl_stream_push_int
 #define JML_MATRIX_PRINT_LINENO	0
 
 

@@ -17,7 +17,7 @@ int main()
 
 	jml_matrix* m5=jml_matrix_negative			(jml_matrix_copy(m1));
 	jml_matrix* m6=jml_matrix_number_multiply	(jml_matrix_copy(m1),3);
-	jml_matrix* m7=jml_matrix_multiply			(m1,m2,NULL);
+	jml_matrix* m7=jml_matrix_multiply			(m1,m2);
 	
 	jml_matrix_view(m5);
 	jml_matrix_view(m6);
