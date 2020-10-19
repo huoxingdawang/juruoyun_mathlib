@@ -63,3 +63,6 @@ matrix :
 permutation :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o            examples$(H)permutation.c	
 	$(CC) $(BITS) -o exes$(H)permutation           tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+pow :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o            examples$(H)pow.c	
+	$(CC) $(BITS) -o exes$(H)pow           tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)

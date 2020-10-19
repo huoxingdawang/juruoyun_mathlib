@@ -63,6 +63,9 @@ matrix :
 permutation :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o            examples$(H)permutation.c	
 	$(CC) $(BITS) -o exes$(H)permutation           tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+pow :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o            examples$(H)pow.c	
+	$(CC) $(BITS) -o exes$(H)pow           tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 #   Copyright (c) [2020] juruoyun developer team
 #   Juruoyun basic lib is licensed under the Mulan PSL v1.
 #   You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -181,11 +184,13 @@ endif
 ifeq ($(system),windows)
 JML_EXLIB = 
 endif
-jml                       :jml/jml_matrix jml/jml_ying jml/jml_permutation 
+jml                       :jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
-jml/jml_matrix           :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o     jml$(H)jml_matrix.c        $(JML_EXLIB)
-jml/jml_ying           :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o       jml$(H)jml_ying.c        $(JML_EXLIB)
-jml/jml_permutation           :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_permutation.o       jml$(H)jml_permutation.c        $(JML_EXLIB)
+jml/jml_matrix            :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o      jml$(H)jml_matrix.c       $(JML_EXLIB)
+jml/jml_ying              :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o        jml$(H)jml_ying.c         $(JML_EXLIB)
+jml/jml_permutation       :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_permutation.o jml$(H)jml_permutation.c  $(JML_EXLIB)
+jml/jml_pow               :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_pow.o         jml$(H)jml_pow.c          $(JML_EXLIB)

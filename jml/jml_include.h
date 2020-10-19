@@ -12,6 +12,7 @@
 
 #include "jml_config.h"
 #include "jml_matrix.h"
+#include "jml_pow.h"
 #include "jml_permutation.h"
 #include "jml_ying.h"
 
