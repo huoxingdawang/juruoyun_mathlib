@@ -12,9 +12,9 @@
 
 
 
-#define JBL_MATRIX_ENABLE		1	//need 
+#define JML_MATRIX_ENABLE		1	//need 
 #define JML_POW_ENABLE			1	//need 
-#define JBL_PERMUTATION_ENABLE	1	//need 
+#define JML_MATRIX_ENABLE	1	//need 
 #define JML_YING_ENABLE			1	//need 
 
 #endif

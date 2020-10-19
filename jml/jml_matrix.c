@@ -8,7 +8,7 @@
    PURPOSE.
    See the Mulan PSL v1 for more details.*/
 #include "jml_matrix.h"
-#if JBL_MATRIX_ENABLE==1
+#if JML_MATRIX_ENABLE==1
 #include "jml_permutation.h"
 jbl_var_operators_new(jml_matrix_operators,jml_matrix_free,jml_matrix_copy,jml_matrix_space_ship,NULL,NULL,NULL);
 #define _d(this,l,r)		(*(this->data+l*this->row+r))

@@ -10,7 +10,7 @@
 #ifndef __JBL_PERMUTATION_CONFIG_H
 #define __JBL_PERMUTATION_CONFIG_H
 #include "jml_config.h"
-#if JBL_PERMUTATION_ENABLE==1
+#if JML_MATRIX_ENABLE==1
 #include "jml_ying.h"
 
 

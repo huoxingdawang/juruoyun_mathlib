@@ -8,7 +8,7 @@
    PURPOSE.
    See the Mulan PSL v1 for more details.*/
 #include "jml_permutation.h"
-#if JBL_PERMUTATION_ENABLE==1
+#if JML_MATRIX_ENABLE==1
 jbl_var_operators_new(jml_permutation_operators,jml_permutation_free,jml_permutation_copy,NULL,NULL,NULL,NULL);
 jml_permutation* jml_permutation_new(jbl_uint64 size)
 {

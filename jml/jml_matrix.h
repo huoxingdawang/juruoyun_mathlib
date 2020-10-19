@@ -10,7 +10,7 @@
 #ifndef __JBL_MATRIX_H
 #define __JBL_MATRIX_H
 #include "jml_matrix_config.h"
-#if JBL_MATRIX_ENABLE==1
+#if JML_MATRIX_ENABLE==1
 #include "jml_ying.h"
 typedef struct __jml_matrix
 {
