@@ -11,9 +11,6 @@
 #define __JML_YING_CONFIG_H
 #include "jml_config.h"
 #if JML_YING_ENABLE==1
-#define JML_DOUBLE_PRECISION 0.00001
-#define JML_INLINE
-
 
 
 #endif
