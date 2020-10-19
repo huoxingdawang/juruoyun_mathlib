@@ -36,7 +36,7 @@ ifeq ($(system),macos)
 	rm = rm -f
 	pre = macos_
 endif
-all:jbl jml matrix
+all:jbl jml matrix permutation pow
 clean:
 	$(rm) tmp$(H)* /s /Q
 	$(rm) exes$(H)* /s /Q
@@ -46,7 +46,13 @@ init:
 	mkdir tmp
 	mkdir exes
 run:
-	exes$(H)test    &&pause
+	exes$(H)matrix0     &&pause
+	exes$(H)matrix1     &&pause
+	exes$(H)matrix2     &&pause
+	exes$(H)matrix3     &&pause
+	exes$(H)matrix4     &&pause
+	exes$(H)permutation &&pause
+	exes$(H)pow         &&pause
 
 #examples
 matrix :
