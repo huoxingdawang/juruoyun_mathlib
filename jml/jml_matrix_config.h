@@ -16,7 +16,7 @@ typedef jbl_uint64 jml_matrix_size_type;
 typedef double jml_matrix_data_type;
 #define jml_matrix_data_push			jbl_stream_push_double
 #define JML_MATRIX_PRINT_LINENO			0
-#define JML_MATRIX_DETERMINANT_USE_TOUP	1						//打开可以获得明显性能提升，矩阵越大越明显
+#define JML_MATRIX_DETERMINANT_USE_TOUP	1						//打开可以获得明显性能提升，矩阵越大越明显，但是误差也巨大
 
 
 #endif

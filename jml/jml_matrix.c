@@ -206,6 +206,7 @@ jml_matrix_data_type jml_matrix_determinant(jml_matrix *A)
 #else
 	jml_matrix_data_type result=1;
 	jml_matrix * tmp=jml_matrix_toup(jml_matrix_copy(A));
+//	jml_matrix_view(tmp);
 	for(jml_matrix_size_type i=0;i<tmp->line;++i)result*=_d(tmp,i,i);
 	jml_matrix_free(tmp);
 #endif
