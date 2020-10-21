@@ -193,8 +193,9 @@ jml_matrix_data_type jml_matrix_determinant(jml_matrix *A)
 	if(!A)return 0;
 	A=jbl_refer_pull(A);
 	if(A->line!=A->row)jbl_exception("DETERMINANT NOT SQUARE MATRIX");
-	jml_permutation* p1=jml_permutation_new(A->row);
+#if JML_MATRIX_DETERMINANT_USE_TOUP==0
 	jml_matrix_data_type result=0;
+	jml_permutation* p1=jml_permutation_new(A->row);
 	do
 	{
 		jml_matrix_data_type temp=p1->ji?-1:1;
@@ -202,13 +203,20 @@ jml_matrix_data_type jml_matrix_determinant(jml_matrix *A)
 		result+=temp;
 	}while(jml_permutation_next(p1));
 	p1=jml_permutation_free(p1);
+#else
+	jml_matrix_data_type result=1;
+	jml_matrix * tmp=jml_matrix_toup(jml_matrix_copy(A));
+	for(jml_matrix_size_type i=0;i<tmp->line;++i)result*=_d(tmp,i,i);
+	jml_matrix_free(tmp);
+#endif
 	return result;
 }
 jml_matrix* jml_matrix_swap_line(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2)
 {
 	if(!A)return NULL;
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
-	for(jml_matrix_size_type i=0;i<A->row;++i)
+	if(l1==l2||l1>=a->line||l2>=a->line)return A;
+	for(jml_matrix_size_type i=0;i<a->row;++i)
 	{
 		jml_matrix_data_type c=_d(a,l1,i);
 		_d(a,l1,i)=_d(a,l2,i);
@@ -220,7 +228,8 @@ jml_matrix* jml_matrix_swap_row(jml_matrix* A,jml_matrix_size_type r1,jml_matrix
 {
 	if(!A)return NULL;
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
-	for(jml_matrix_size_type i=0;i<A->line;++i)
+	if(r1==r2||r1>=a->row||r2>=a->row)return A;
+	for(jml_matrix_size_type i=0;i<a->line;++i)
 	{
 		jml_matrix_data_type c=_d(a,i,r1);
 		_d(a,i,r1)=_d(a,i,r2);
@@ -232,28 +241,50 @@ jml_matrix* jml_matrix_multiply_line(jml_matrix* A,jml_matrix_size_type l,jml_ma
 {
 	if(!A)return NULL;
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
-	for(jml_matrix_size_type i=0;i<A->row;++i)_d(a,l,i)*=v;
+	if(l>=a->line)return A;
+	for(jml_matrix_size_type i=0;i<a->row;++i)_d(a,l,i)*=v;
 	return A;	
 }
 jml_matrix* jml_matrix_multiply_row(jml_matrix* A,jml_matrix_size_type r,jml_matrix_data_type v)
 {
 	if(!A)return NULL;
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
-	for(jml_matrix_size_type i=0;i<A->line;++i)_d(a,i,r)*=v;
+	if(r>=a->row)return A;
+	for(jml_matrix_size_type i=0;i<a->line;++i)_d(a,i,r)*=v;
 	return A;	
 }
 jml_matrix *jml_matrix_add_line(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2,jml_matrix_data_type v)
 {
 	if(!A)return NULL;
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
-	for(jml_matrix_size_type i=0;i<A->row;++i)_d(a,l1,i)+=_d(a,l2,i)*v;
+	if(l1==l2||l1>=a->line||l2>=a->line)return A;
+	for(jml_matrix_size_type i=0;i<a->row;++i)_d(a,l1,i)+=_d(a,l2,i)*v;
 	return A;		
 }
 jml_matrix *jml_matrix_add_row(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2,jml_matrix_data_type v)
 {
 	if(!A)return NULL;
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
-	for(jml_matrix_size_type i=0;i<A->line;++i)_d(a,i,r1)+=_d(a,i,r2)*v;
+	if(r1==r2||r1>=a->row||r2>=a->row)return A;
+	for(jml_matrix_size_type i=0;i<a->line;++i)_d(a,i,r1)+=_d(a,i,r2)*v;
+	return A;	
+}
+jml_matrix *jml_matrix_toup(jml_matrix* A)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+//	if(a->line!=a->row)jbl_exception("TOUP NOT SQUARE MATRIX");
+	jbl_uint8 f=0;
+	jml_matrix_size_type n=jbl_min(a->line,a->row);
+	for(jml_matrix_size_type i=0,j=0;i<n;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
+	{		
+		for(j=i;j<n&&!_d(a,j,i);++j);
+		if(j>=n)continue;
+		if(i!=j)a=jml_matrix_swap_line(a,i,j),f=!f;
+		for(jml_matrix_size_type k=i+1;k<n;++k)
+			a=jml_matrix_add_line(a,k,i,-_d(a,k,i)/_d(a,i,i));
+	}
+	if(f)a=jml_matrix_negative(a);
 	return A;	
 }
 #if JBL_STREAM_ENABLE==1

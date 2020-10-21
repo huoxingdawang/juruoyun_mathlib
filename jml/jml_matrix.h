@@ -47,6 +47,7 @@ jml_matrix *			jml_matrix_multiply_line		(jml_matrix* A,jml_matrix_size_type l,j
 jml_matrix *			jml_matrix_multiply_row			(jml_matrix* A,jml_matrix_size_type r,jml_matrix_data_type v);		//把r列全部元素乘v，A的原地运算
 jml_matrix *			jml_matrix_add_line				(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2,jml_matrix_data_type v);		//把l1行全部元素加l2元素乘v，A的原地运算
 jml_matrix *			jml_matrix_add_row				(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2,jml_matrix_data_type v);		//把r1列全部元素加r2元素乘v，A的原地运算
+jml_matrix *			jml_matrix_toup					(jml_matrix* A);
 
 #if JBL_STREAM_ENABLE==1
 jml_matrix*				jml_matrix_view_put						(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file);	//从out浏览一个字符串
