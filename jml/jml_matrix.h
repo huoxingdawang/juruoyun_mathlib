@@ -26,31 +26,27 @@ jml_matrix *			jml_matrix_newE					(jml_matrix_size_type n);								//新建一�
 jml_matrix *			jml_matrix_copy					(jml_matrix *that);										//复制一个矩阵
 jml_matrix *			jml_matrix_free					(jml_matrix *this);										//释放一个矩阵
 #define					jml_matrix_extend(a,b,c)		jml_matrix_extend_to((a),(b),(c),1,NULL)				//将矩阵修改为b*c大小(多于部分直接丢弃，不足补零)
-jml_matrix *			jml_matrix_extend_to			(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jbl_uint8 small,jml_matrix **pth);							//扩展字符串this到size字节
-jml_matrix_data_type	jml_matrix_get					(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row);
-jml_matrix *			jml_matrix_set					(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jml_matrix_data_type v);
-jml_matrix *			jml_matrix_add					(jml_matrix* A,jml_matrix* B);
-jml_matrix *			jml_matrix_minus				(jml_matrix* A,jml_matrix* B);
-jml_matrix *			jml_matrix_negative				(jml_matrix* A);
-jml_matrix *			jml_matrix_number_multiply		(jml_matrix* A,jml_matrix_data_type v);
-jml_matrix *			jml_matrix_multiply				(jml_matrix* A,jml_matrix* B);
-jml_matrix *			jml_matrix_transpose			(jml_matrix* A);
-jml_matrix *			jml_matrix_pow					(jml_matrix* A,jbl_uint64 n);										//求矩阵的幂
-char					jml_matrix_space_ship			(jml_matrix *this,jml_matrix *that);								//比较两个矩阵
-#define					jml_matrix_if_equal(x,y)		(jml_matrix_space_ship(x,y)==0)										//判断this是否=that
-#define					jml_matrix_if_big(x,y)			(jml_matrix_space_ship(x,y)>0)										//判断this是否>that
-#define					jml_matrix_if_small(x,y)		(jml_matrix_space_ship(x,y)<0)										//判断this是否<that
-#define					jml_matrix_if_equal_small(x,y)	(jml_matrix_space_ship(x,y)<=0)										//判断this是否>=that
-#define					jml_matrix_if_equal_big(x,y)	(jml_matrix_space_ship(x,y)>=0)										//判断this是否<=that
-jml_matrix *			jml_matrix_minor				(jml_matrix *A,jml_matrix_size_type line,jml_matrix_size_type row);	//余子式
-jml_matrix *			jml_matrix_cofactor				(jml_matrix *A,jml_matrix_size_type line,jml_matrix_size_type row);	//代数余子式
-jml_matrix_data_type	jml_matrix_determinant			(jml_matrix *A);													//计算行列式
-jml_matrix *			jml_matrix_swap_line			(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2);	//交换行
-jml_matrix *			jml_matrix_swap_row				(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2);	//交换两列
-jml_matrix *			jml_matrix_multiply_line		(jml_matrix* A,jml_matrix_size_type l,jml_matrix_data_type v);		//把l行全部元素乘v
-jml_matrix *			jml_matrix_multiply_row			(jml_matrix* A,jml_matrix_size_type r,jml_matrix_data_type v);		//把r列全部元素乘v
-jml_matrix *			jml_matrix_add_line				(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2,jml_matrix_data_type v);		//把l1行全部元素加l2元素乘v
-jml_matrix *			jml_matrix_add_row				(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2,jml_matrix_data_type v);		//把r1列全部元素加r2元素乘v
+jml_matrix *			jml_matrix_extend_to			(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jbl_uint8 small,jml_matrix **pth);		//扩展矩阵this到size字节
+jml_matrix_data_type	jml_matrix_get					(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row);							//矩阵取值
+jml_matrix *			jml_matrix_set					(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jml_matrix_data_type v);	//矩阵赋值，A的原地运算
+jml_matrix *			jml_matrix_add					(jml_matrix* A,jml_matrix* B);										//矩阵求和，A的原地运算
+jml_matrix *			jml_matrix_minus				(jml_matrix* A,jml_matrix* B);										//矩阵求差，A的原地运算
+jml_matrix *			jml_matrix_negative				(jml_matrix* A);													//矩阵求负，A的原地运算
+jml_matrix *			jml_matrix_number_multiply		(jml_matrix* A,jml_matrix_data_type v);								//矩阵数乘，A的原地运算
+jml_matrix *			jml_matrix_multiply				(jml_matrix* A,jml_matrix* B);										//矩阵乘法，注意会生成一个新矩阵
+jml_matrix *			jml_matrix_transpose			(jml_matrix* A);													//矩阵转置，A的原地运算
+jml_matrix *			jml_matrix_pow					(jml_matrix* A,jbl_uint64 n);										//矩阵求幂，注意会生成一个新矩阵
+char					jml_matrix_space_ship			(jml_matrix *this,jml_matrix *that);								//矩阵比较
+#define					jml_matrix_if_equal(x,y)		(jml_matrix_space_ship(x,y)==0)										//矩阵判等
+jml_matrix *			jml_matrix_minor				(jml_matrix *A,jml_matrix_size_type line,jml_matrix_size_type row);	//矩阵求余子式    ，注意会生成一个新矩阵
+jml_matrix *			jml_matrix_cofactor				(jml_matrix *A,jml_matrix_size_type line,jml_matrix_size_type row);	//矩阵求代数余子式，注意会生成一个新矩阵
+jml_matrix_data_type	jml_matrix_determinant			(jml_matrix *A);													//矩阵求行列式
+jml_matrix *			jml_matrix_swap_line			(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2);	//矩阵换行，A的原地运算
+jml_matrix *			jml_matrix_swap_row				(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2);	//矩阵换列，A的原地运算
+jml_matrix *			jml_matrix_multiply_line		(jml_matrix* A,jml_matrix_size_type l,jml_matrix_data_type v);		//把l行全部元素乘v，A的原地运算
+jml_matrix *			jml_matrix_multiply_row			(jml_matrix* A,jml_matrix_size_type r,jml_matrix_data_type v);		//把r列全部元素乘v，A的原地运算
+jml_matrix *			jml_matrix_add_line				(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2,jml_matrix_data_type v);		//把l1行全部元素加l2元素乘v，A的原地运算
+jml_matrix *			jml_matrix_add_row				(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2,jml_matrix_data_type v);		//把r1列全部元素加r2元素乘v，A的原地运算
 
 #if JBL_STREAM_ENABLE==1
 jml_matrix*				jml_matrix_view_put						(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file);	//从out浏览一个字符串
