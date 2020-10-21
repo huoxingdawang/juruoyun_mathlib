@@ -11,6 +11,7 @@
 #define __JML_INCLUE_H
 
 #include "jml_config.h"
+#include "jml_gcd.h"
 #include "jml_matrix.h"
 #include "jml_pow.h"
 #include "jml_permutation.h"

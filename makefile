@@ -36,7 +36,7 @@ ifeq ($(system),macos)
 	rm = rm -f
 	pre = macos_
 endif
-all:jbl jml matrix permutation pow
+all:jbl jml gcd matrix permutation pow
 clean:
 	$(rm) tmp$(H)* /s /Q
 	$(rm) exes$(H)* /s /Q
@@ -46,6 +46,7 @@ init:
 	mkdir tmp
 	mkdir exes
 run:
+	exes$(H)gcd         &&pause
 	exes$(H)matrix0     &&pause
 	exes$(H)matrix1     &&pause
 	exes$(H)matrix2     &&pause
@@ -55,6 +56,9 @@ run:
 	exes$(H)pow         &&pause
 
 #examples
+gcd :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)gcd.o                examples$(H)gcd.c	
+	$(CC) $(BITS) -o exes$(H)gcd               tmp$(H)$(pre)gcd.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 matrix :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix0.o            examples$(H)matrix0.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix1.o            examples$(H)matrix1.c	
@@ -70,11 +74,11 @@ matrix :
 	$(CC) $(BITS) -o exes$(H)matrix4           tmp$(H)$(pre)matrix4.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix_benchmark0 tmp$(H)$(pre)matrix_benchmark0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 permutation :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o            examples$(H)permutation.c	
-	$(CC) $(BITS) -o exes$(H)permutation           tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o        examples$(H)permutation.c	
+	$(CC) $(BITS) -o exes$(H)permutation       tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 pow :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o            examples$(H)pow.c	
-	$(CC) $(BITS) -o exes$(H)pow           tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o                examples$(H)pow.c	
+	$(CC) $(BITS) -o exes$(H)pow               tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 #   Copyright (c) [2020] juruoyun developer team
 #   Juruoyun basic lib is licensed under the Mulan PSL v1.
 #   You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -193,8 +197,10 @@ endif
 ifeq ($(system),windows)
 JML_EXLIB = 
 endif
-jml                       :jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
+jml                       :jml/jml_gcd jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
+jml/jml_gcd               :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_gcd.o         jml$(H)jml_gcd.c          $(JML_EXLIB)
 jml/jml_matrix            :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o      jml$(H)jml_matrix.c       $(JML_EXLIB)
 jml/jml_ying              :

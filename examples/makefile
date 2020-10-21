@@ -36,7 +36,7 @@ ifeq ($(system),macos)
 	rm = rm -f
 	pre = macos_
 endif
-all:jbl jml matrix permutation pow
+all:jbl jml gcd matrix permutation pow
 clean:
 	$(rm) tmp$(H)* /s /Q
 	$(rm) exes$(H)* /s /Q
@@ -46,6 +46,7 @@ init:
 	mkdir tmp
 	mkdir exes
 run:
+	exes$(H)gcd         &&pause
 	exes$(H)matrix0     &&pause
 	exes$(H)matrix1     &&pause
 	exes$(H)matrix2     &&pause
@@ -55,6 +56,9 @@ run:
 	exes$(H)pow         &&pause
 
 #examples
+gcd :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)gcd.o                examples$(H)gcd.c	
+	$(CC) $(BITS) -o exes$(H)gcd               tmp$(H)$(pre)gcd.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 matrix :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix0.o            examples$(H)matrix0.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix1.o            examples$(H)matrix1.c	
@@ -70,8 +74,8 @@ matrix :
 	$(CC) $(BITS) -o exes$(H)matrix4           tmp$(H)$(pre)matrix4.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix_benchmark0 tmp$(H)$(pre)matrix_benchmark0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 permutation :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o            examples$(H)permutation.c	
-	$(CC) $(BITS) -o exes$(H)permutation           tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o        examples$(H)permutation.c	
+	$(CC) $(BITS) -o exes$(H)permutation       tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 pow :
-	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o            examples$(H)pow.c	
-	$(CC) $(BITS) -o exes$(H)pow           tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o                examples$(H)pow.c	
+	$(CC) $(BITS) -o exes$(H)pow               tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)

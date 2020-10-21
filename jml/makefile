@@ -14,8 +14,10 @@ endif
 ifeq ($(system),windows)
 JML_EXLIB = 
 endif
-jml                       :jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
+jml                       :jml/jml_gcd jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
+jml/jml_gcd               :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_gcd.o         jml$(H)jml_gcd.c          $(JML_EXLIB)
 jml/jml_matrix            :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o      jml$(H)jml_matrix.c       $(JML_EXLIB)
 jml/jml_ying              :
