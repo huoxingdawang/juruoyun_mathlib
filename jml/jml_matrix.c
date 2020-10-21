@@ -83,7 +83,6 @@ jml_matrix *jml_matrix_set(jml_matrix *this,jml_matrix_size_type line,jml_matrix
 	_d(thi,line,row)=v;	
 	return this;
 }
-
 jml_matrix* jml_matrix_add(jml_matrix* A,jml_matrix* B)
 {
 	if(!B)return A;
@@ -204,6 +203,58 @@ jml_matrix_data_type jml_matrix_determinant(jml_matrix *A)
 	}while(jml_permutation_next(p1));
 	p1=jml_permutation_free(p1);
 	return result;
+}
+jml_matrix* jml_matrix_swap_line(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	for(jml_matrix_size_type i=0;i<A->row;++i)
+	{
+		jml_matrix_data_type c=_d(a,l1,i);
+		_d(a,l1,i)=_d(a,l2,i);
+		_d(a,l2,i)=c;
+	}
+	return A;
+}
+jml_matrix* jml_matrix_swap_row(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	for(jml_matrix_size_type i=0;i<A->line;++i)
+	{
+		jml_matrix_data_type c=_d(a,i,r1);
+		_d(a,i,r1)=_d(a,i,r2);
+		_d(a,i,r2)=c;
+	}
+	return A;
+}
+jml_matrix* jml_matrix_multiply_line(jml_matrix* A,jml_matrix_size_type l,jml_matrix_data_type v)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	for(jml_matrix_size_type i=0;i<A->row;++i)_d(a,l,i)*=v;
+	return A;	
+}
+jml_matrix* jml_matrix_multiply_row(jml_matrix* A,jml_matrix_size_type r,jml_matrix_data_type v)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	for(jml_matrix_size_type i=0;i<A->line;++i)_d(a,i,r)*=v;
+	return A;	
+}
+jml_matrix *jml_matrix_add_line(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2,jml_matrix_data_type v)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	for(jml_matrix_size_type i=0;i<A->row;++i)_d(a,l1,i)+=_d(a,l2,i)*v;
+	return A;		
+}
+jml_matrix *jml_matrix_add_row(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2,jml_matrix_data_type v)
+{
+	if(!A)return NULL;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	for(jml_matrix_size_type i=0;i<A->line;++i)_d(a,i,r1)+=_d(a,i,r2)*v;
+	return A;	
 }
 #if JBL_STREAM_ENABLE==1
 jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)

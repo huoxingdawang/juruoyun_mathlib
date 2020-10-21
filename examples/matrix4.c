@@ -2,9 +2,9 @@
 
 int main()
 {
-	printf("--------------------------------" __FILE__ "--------------------------------\n");
 	jbl_start();
 	jml_start();
+	pchars("--------------------------------" __FILE__ "--------------------------------\n");
 	{
 		jml_matrix* m1=jml_matrix_new(3,3);
 		m1=jml_matrix_set(m1,0,0,1);	m1=jml_matrix_set(m1,0,1,1);	m1=jml_matrix_set(m1,0,2,1);
