@@ -10,5 +10,5 @@
 #include "jml_gcd.h"
 #if JML_GCD_ENABLE==1
 jbl_uint64 jml_gcd(jbl_uint64 a,jbl_uint64 b){return b?jml_gcd(b,a%b):a;}
-jbl_uint64 jml_lcm(jbl_uint64 a,jbl_uint64 b){return a*b/jml_gcd(a,b);}
+jbl_uint64 jml_lcm(jbl_uint64 a,jbl_uint64 b){return a/jml_gcd(a,b)*b;}
 #endif
