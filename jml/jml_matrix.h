@@ -47,7 +47,11 @@ jml_matrix *			jml_matrix_multiply_line		(jml_matrix* A,jml_matrix_size_type l,j
 jml_matrix *			jml_matrix_multiply_row			(jml_matrix* A,jml_matrix_size_type r,jml_matrix_data_type v);		//把r列全部元素乘v，A的原地运算
 jml_matrix *			jml_matrix_add_line				(jml_matrix* A,jml_matrix_size_type l1,jml_matrix_size_type l2,jml_matrix_data_type v);		//把l1行全部元素加l2元素乘v，A的原地运算
 jml_matrix *			jml_matrix_add_row				(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_size_type r2,jml_matrix_data_type v);		//把r1列全部元素加r2元素乘v，A的原地运算
-jml_matrix *			jml_matrix_toup					(jml_matrix* A);
+jml_matrix *			jml_matrix_replace_line			(jml_matrix* A,jml_matrix* B,jml_matrix_size_type l1,jml_matrix_size_type l2);		//把矩阵A 的第l1行全部替换为B的第l2行
+jml_matrix *			jml_matrix_replace_row			(jml_matrix* A,jml_matrix* B,jml_matrix_size_type r1,jml_matrix_size_type r2);		//把矩阵A 的第r1列全部替换为B的第r2列
+jml_matrix *			jml_matrix_toup					(jml_matrix* A);													//矩阵化成上三角阵，A的原地运算
+jml_matrix *			jml_matrix_adjugate				(jml_matrix* A);													//矩阵转换为伴随矩阵，A的原地运算
+jml_matrix *			jml_matrix_cramer				(jml_matrix* A,jml_matrix* B);										//以A为系数矩阵，B为常数矩阵解方程，注意会生成一个新矩阵
 
 #if JBL_STREAM_ENABLE==1
 jml_matrix*				jml_matrix_view_put						(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file);	//从out浏览一个字符串

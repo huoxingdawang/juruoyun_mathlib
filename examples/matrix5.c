@@ -9,6 +9,7 @@ int main()
 	m1=jml_matrix_set(m1,0,0,-1);	m1=jml_matrix_set(m1,0,1,0);	m1=jml_matrix_set(m1,0,2,3);	m1=jml_matrix_set(m1,0,3,1);
 	m1=jml_matrix_set(m1,1,0,0);	m1=jml_matrix_set(m1,1,1,2);	m1=jml_matrix_set(m1,1,2,-4);	m1=jml_matrix_set(m1,1,3,-2);
 	m1=jml_matrix_set(m1,2,0,0);	m1=jml_matrix_set(m1,2,1,-1);	m1=jml_matrix_set(m1,2,2,1);	m1=jml_matrix_set(m1,2,3,1);
+	m1=jml_matrix_set(m1,3,0,0);	m1=jml_matrix_set(m1,3,1,2);	m1=jml_matrix_set(m1,3,2,-9);	m1=jml_matrix_set(m1,3,3,1);	
 	jml_matrix* m2=jml_matrix_swap_line		(jml_matrix_copy(m1),0,2);
 	jml_matrix* m3=jml_matrix_swap_row		(jml_matrix_copy(m1),0,2);
 	jml_matrix* m4=jml_matrix_multiply_line	(jml_matrix_copy(m1),0,2);

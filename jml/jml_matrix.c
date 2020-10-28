@@ -270,6 +270,30 @@ jml_matrix *jml_matrix_add_row(jml_matrix* A,jml_matrix_size_type r1,jml_matrix_
 	for(jml_matrix_size_type i=0;i<a->line;++i)_d(a,i,r1)+=_d(a,i,r2)*v;
 	return A;	
 }
+jml_matrix *jml_matrix_replace_line(jml_matrix* A,jml_matrix* B,jml_matrix_size_type l1,jml_matrix_size_type l2)
+{
+	if(!A)return NULL;
+	if(!B)return A;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	jml_matrix *b=jbl_refer_pull(B);
+	if(a->row!=b->row)	jbl_exception("REPLACE NOT EQUAL ROW  MATRIX");
+	if(l1>=a->line)		jbl_exception("MATRIX OVREFLOW");
+	if(l2>=b->line)		jbl_exception("MATRIX OVREFLOW");
+	for(jml_matrix_size_type i=0;i<a->row;++i)_d(a,l1,i)=_d(b,l2,i);
+	return A;
+}
+jml_matrix *jml_matrix_replace_row(jml_matrix* A,jml_matrix* B,jml_matrix_size_type r1,jml_matrix_size_type r2)
+{
+	if(!A)return NULL;
+	if(!B)return A;
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	jml_matrix *b=jbl_refer_pull(B);
+	if(a->line!=b->line)jbl_exception("REPLACE NOT EQUAL LINE  MATRIX");
+	if(r1>=a->row)		jbl_exception("MATRIX OVREFLOW");
+	if(r2>=b->row)		jbl_exception("MATRIX OVREFLOW");
+	for(jml_matrix_size_type i=0;i<a->line;++i)_d(a,i,r1)=_d(b,i,r2);
+	return A;
+}
 jml_matrix *jml_matrix_toup(jml_matrix* A)
 {
 	if(!A)return NULL;
@@ -287,6 +311,40 @@ jml_matrix *jml_matrix_toup(jml_matrix* A)
 	}
 	if(f)a=jml_matrix_negative(a);
 	return A;	
+}
+jml_matrix *jml_matrix_adjugate(jml_matrix* A)
+{
+	if(!A)return NULL;
+	jml_matrix *b=jml_matrix_copy(jbl_refer_pull(A));
+	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
+	_f(b,i,j)
+	{
+		jml_matrix *c=jml_matrix_cofactor(b,i,j);
+		_d(a,i,j)=jml_matrix_determinant(c);
+		jml_matrix_free(c);
+	}
+	jml_matrix_free(b);
+	return A;	
+}
+jml_matrix *jml_matrix_cramer(jml_matrix* A,jml_matrix* B)
+{
+	if(!A)return NULL;
+	if(!B)return NULL;
+	jml_matrix *a=jbl_refer_pull(A);
+	jml_matrix *b=jbl_refer_pull(B);
+	if(a->line!=b->line)jbl_exception("CRAMER NOT EQUAL LINE  MATRIX");
+	if(a->line!=a->row)	jbl_exception("CRAMER NOT SQUARE MATRIX");
+	if(b->row != 1)		jbl_exception("CRAMER NOT ROW EQUAL 1 MATRIX");
+	jml_matrix_data_type D=jml_matrix_determinant(a);
+	if(!D)return NULL;
+	jml_matrix * ans=jml_matrix_new(1,a->row);
+	for(jml_matrix_size_type r=0;r<a->row;++r)
+	{
+		jml_matrix *c=jml_matrix_replace_row(jml_matrix_copy(a),b,r,0);
+		_d(ans,0,r)=jml_matrix_determinant(c)/D;	
+		jml_matrix_free(c);
+	}
+	return ans;	
 }
 #if JBL_STREAM_ENABLE==1
 jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)
