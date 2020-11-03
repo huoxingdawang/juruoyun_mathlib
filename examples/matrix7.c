@@ -108,7 +108,7 @@ int main()
 		m1=jml_matrix_free(m1);
 	}
 	{   //(8)
-		jml_matrix* m1=jml_matrix_new(5,5);
+		jml_matrix* m1=jml_matrix_new(4,5);
 		m1=jml_matrix_set(m1,0,0,1);	m1=jml_matrix_set(m1,0,1,-1);	m1=jml_matrix_set(m1,0,2,2);	m1=jml_matrix_set(m1,0,3,1);	m1=jml_matrix_set(m1,0,4,0);
 		m1=jml_matrix_set(m1,1,0,2);	m1=jml_matrix_set(m1,1,1,-2);	m1=jml_matrix_set(m1,1,2,4);	m1=jml_matrix_set(m1,1,3,-2);	m1=jml_matrix_set(m1,1,4,0);
 		m1=jml_matrix_set(m1,2,0,3);	m1=jml_matrix_set(m1,2,1,0);	m1=jml_matrix_set(m1,2,2,6);	m1=jml_matrix_set(m1,2,3,-1);	m1=jml_matrix_set(m1,2,4,1);
