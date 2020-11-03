@@ -1,7 +1,7 @@
 #include "main.h"
 #define MAXN 10
-#define TEST_TIMES 1
-//173716916184296448.0
+#define TEST_TIMES 1000
+//173716916184308160.0
 int main()
 {
 	jbl_start();
