@@ -300,13 +300,12 @@ jml_matrix *jml_matrix_toup(jml_matrix* A)
 	jml_matrix *a;A=jml_matrix_extend_to(A,0,0,0,&a);
 //	if(a->line!=a->row)jbl_exception("TOUP NOT SQUARE MATRIX");
 	jbl_uint8 f=0;
-	jml_matrix_size_type n=jbl_min(a->line,a->row);
-	for(jml_matrix_size_type i=0,j=0;i<n;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
+	for(jml_matrix_size_type i=0,j=0;i<a->line;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
 	{		
-		for(j=i;j<n&&!_d(a,j,i);++j);
-		if(j>=n)continue;
+		for(j=i;j<a->line&&i<a->row&&!_d(a,j,i);++j);
+		if(j>=a->line)continue;
 		if(i!=j)a=jml_matrix_swap_line(a,i,j),f=!f;
-		for(jml_matrix_size_type k=i+1;k<n;++k)
+		for(jml_matrix_size_type k=i+1;k<a->line;++k)
 			a=jml_matrix_add_line(a,k,i,-_d(a,k,i)/_d(a,i,i));
 	}
 	if(f)a=jml_matrix_negative(a);
@@ -345,6 +344,17 @@ jml_matrix *jml_matrix_cramer(jml_matrix* A,jml_matrix* B)
 		jml_matrix_free(c);
 	}
 	return ans;	
+}
+jml_matrix_size_type jml_matrix_rank(jml_matrix *A)
+{
+    jml_matrix * a=jml_matrix_toup(jml_matrix_copy(jbl_refer_pull(A)));
+//  jml_matrix_view(a);pf();
+    jml_matrix_size_type i=0,j=0;    
+    for(;j<a->row&&i<a->line;++j)
+        if(_d(a,i,j))
+            ++i;
+    a=jml_matrix_free(a);
+    return i;
 }
 #if JBL_STREAM_ENABLE==1
 jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)
