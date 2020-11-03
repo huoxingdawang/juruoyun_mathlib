@@ -1,5 +1,6 @@
 #include "main.h"
 #define MAXN 10
+#define TEST_TIMES 1
 //173716916184296448.0
 int main()
 {
@@ -11,7 +12,7 @@ int main()
 	jml_matrix_view(m1);
 	pdouble(jml_matrix_determinant(m1));pn();pf();
 	jbl_time * t1=jbl_time_now(NULL);
-	for(int i=0;i<1;++i)jml_matrix_determinant(m1);
+	for(int i=0;i<TEST_TIMES;++i)jml_matrix_determinant(m1);
 	jbl_time * t2=jbl_time_now(NULL);
 	puint(jbl_time_minus(t2,t1));pchars("ms\n");
 	t1=jbl_time_free(t1);

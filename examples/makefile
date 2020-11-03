@@ -80,7 +80,7 @@ matrix :
 	$(CC) $(BITS) -o exes$(H)matrix5           tmp$(H)$(pre)matrix5.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix6           tmp$(H)$(pre)matrix6.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix7           tmp$(H)$(pre)matrix7.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
-	$(CC) $(BITS) -o exes$(H)matrixbenchmark0 tmp$(H)$(pre)matrix_benchmark0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix_benchmark0 tmp$(H)$(pre)matrix_benchmark0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 permutation :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o        examples$(H)permutation.c	
 	$(CC) $(BITS) -o exes$(H)permutation       tmp$(H)$(pre)permutation.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
