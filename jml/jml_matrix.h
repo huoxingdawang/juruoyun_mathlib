@@ -53,6 +53,7 @@ jml_matrix *			jml_matrix_toup					(jml_matrix* A);													//矩阵化成�
 jml_matrix *			jml_matrix_adjugate				(jml_matrix* A);													//矩阵转换为伴随矩阵，A的原地运算
 jml_matrix *			jml_matrix_cramer				(jml_matrix* A,jml_matrix* B);										//以A为系数矩阵，B为常数矩阵解方程，注意会生成一个新矩阵
 jml_matrix_size_type	jml_matrix_rank		        	(jml_matrix *A);													//矩阵求秩
+jml_matrix *            jml_matrix_inverse              (jml_matrix* A);
 
 #if JBL_STREAM_ENABLE==1
 jml_matrix*				jml_matrix_view_put						(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file);	//从out浏览一个字符串

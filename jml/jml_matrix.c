@@ -347,6 +347,7 @@ jml_matrix *jml_matrix_cramer(jml_matrix* A,jml_matrix* B)
 }
 jml_matrix_size_type jml_matrix_rank(jml_matrix *A)
 {
+	if(!A)return 0;
     jml_matrix * a=jml_matrix_toup(jml_matrix_copy(jbl_refer_pull(A)));
 //  jml_matrix_view(a);pf();
     jml_matrix_size_type i=0,j=0;    
@@ -355,6 +356,32 @@ jml_matrix_size_type jml_matrix_rank(jml_matrix *A)
             ++i;
     a=jml_matrix_free(a);
     return i;
+}
+jml_matrix *jml_matrix_inverse(jml_matrix* A)
+{
+	if(!A)return NULL;
+    jml_matrix * a=jml_matrix_copy(jbl_refer_pull(A));
+    jml_matrix * e=jml_matrix_newE(a->line);
+	for(jml_matrix_size_type i=0,j=0;i<a->line;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
+	{		
+		for(j=i;j<a->line&&i<a->row&&!_d(a,j,i);++j);
+		if(j>=a->line)continue;
+		if(i!=j)a=jml_matrix_swap_line(a,i,j),e=jml_matrix_swap_line(e,i,j);
+		for(jml_matrix_size_type k=i+1;k<a->line;++k)
+			e=jml_matrix_add_line(e,k,i,-_d(a,k,i)/_d(a,i,i)),
+			a=jml_matrix_add_line(a,k,i,-_d(a,k,i)/_d(a,i,i));
+	}
+	for(jml_matrix_size_type i=0;i<a->line;++i)
+        e=jml_matrix_multiply_line(e,i,1/_d(a,i,i)),
+        a=jml_matrix_multiply_line(a,i,1/_d(a,i,i));
+	for(jml_matrix_size_type i=a->line-1;i!=(-1ULL);--i)
+    {
+		for(jml_matrix_size_type k=i-1;k!=(-1ULL);--k)
+			e=jml_matrix_add_line(e,k,i,-_d(a,k,i)/_d(a,i,i)),
+			a=jml_matrix_add_line(a,k,i,-_d(a,k,i)/_d(a,i,i));        
+    }
+    a=jml_matrix_free(a);
+	return e;	
 }
 #if JBL_STREAM_ENABLE==1
 jml_matrix* jml_matrix_view_put(jml_matrix* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)
