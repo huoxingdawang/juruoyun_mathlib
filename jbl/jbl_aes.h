@@ -71,8 +71,8 @@ jbl_string *	jbl_aes_128_ecb_decode					(jbl_aes_128_key *w,jbl_string *this,jbl
 /*******************************************************************************************/
 extern const jbl_stream_operater jbl_stream_aes_128_ecb_encode_operators;																	//AES128ECB加密流处理器
 extern const jbl_stream_operater jbl_stream_aes_128_ecb_decode_operators;																	//AES128ECB解密流处理器
-#define			jbl_stream_aes_128_ecb_encode_new(w)	jbl_stream_new(&jbl_stream_aes_128_ecb_encode_operators,jbl_aes_128_key_copy(w),1024*1024+32,NULL,0)	//新建AES128ECB加密流
-#define			jbl_stream_aes_128_ecb_decode_new(w)	jbl_stream_new(&jbl_stream_aes_128_ecb_decode_operators,jbl_aes_128_key_copy(w),1024*1024+32,NULL,0)	//新建AES128ECB解密流
+#define			jbl_stream_aes_128_ecb_encode_new(w)	jbl_stream_new(&jbl_stream_aes_128_ecb_encode_operators,jbl_aes_128_key_copy(w),JBL_STREAM_EXCEED_LENGTH+32,NULL,0)	//新建AES128ECB加密流
+#define			jbl_stream_aes_128_ecb_decode_new(w)	jbl_stream_new(&jbl_stream_aes_128_ecb_decode_operators,jbl_aes_128_key_copy(w),JBL_STREAM_EXCEED_LENGTH+32,NULL,0)	//新建AES128ECB解密流
 
 #endif
 #endif
