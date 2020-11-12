@@ -349,7 +349,6 @@ jml_matrix_size_type jml_matrix_rank(jml_matrix *A)
 {
 	if(!A)return 0;
     jml_matrix * a=jml_matrix_toup(jml_matrix_copy(jbl_refer_pull(A)));
-//  jml_matrix_view(a);pf();
     jml_matrix_size_type i=0,j=0;    
     for(;j<a->row&&i<a->line;++j)
         if(_d(a,i,j))
@@ -361,6 +360,7 @@ jml_matrix *jml_matrix_inverse(jml_matrix* A)
 {
 	if(!A)return NULL;
     jml_matrix * a=jml_matrix_copy(jbl_refer_pull(A));
+	if(a->line!=a->row)	jbl_exception("INVERSE NOT SQUARE MATRIX");
     jml_matrix * e=jml_matrix_newE(a->line);
 	for(jml_matrix_size_type i=0,j=0;i<a->line;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
 	{		
@@ -371,10 +371,18 @@ jml_matrix *jml_matrix_inverse(jml_matrix* A)
 			e=jml_matrix_add_line(e,k,i,-_d(a,k,i)/_d(a,i,i)),
 			a=jml_matrix_add_line(a,k,i,-_d(a,k,i)/_d(a,i,i));
 	}
-	for(jml_matrix_size_type i=0;i<a->line;++i)
+    for(jml_matrix_size_type i=0;i<a->line;++i)
+    {
+        if(!_d(a,i,i))
+        {
+            a=jml_matrix_free(a);
+            e=jml_matrix_free(e);
+            return NULL;
+        }
         e=jml_matrix_multiply_line(e,i,1/_d(a,i,i)),
         a=jml_matrix_multiply_line(a,i,1/_d(a,i,i));
-	for(jml_matrix_size_type i=a->line-1;i!=(-1ULL);--i)
+	}
+    for(jml_matrix_size_type i=a->line-1;i!=(-1ULL);--i)
     {
 		for(jml_matrix_size_type k=i-1;k!=(-1ULL);--k)
 			e=jml_matrix_add_line(e,k,i,-_d(a,k,i)/_d(a,i,i)),
