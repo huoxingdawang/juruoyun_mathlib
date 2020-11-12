@@ -10,7 +10,7 @@ int main()
         m1=jml_matrix_set(m1,0,0,1);	m1=jml_matrix_set(m1,0,1,-1);	m1=jml_matrix_set(m1,0,2,-1);
         m1=jml_matrix_set(m1,1,0,-3);	m1=jml_matrix_set(m1,1,1,2);	m1=jml_matrix_set(m1,1,2,1);
         m1=jml_matrix_set(m1,2,0,2);	m1=jml_matrix_set(m1,2,1,0);	m1=jml_matrix_set(m1,2,2,1);
-        jml_matrix* m2=jml_matrix_inverse(m1);
+        jml_matrix* m2=jml_matrix_inverse(NULL,m1);
         
         jml_matrix* m4=jml_matrix_multiply(m1,m2);
         
@@ -27,7 +27,7 @@ int main()
         m1=jml_matrix_set(m1,0,0,-8);	m1=jml_matrix_set(m1,0,1,3);	m1=jml_matrix_set(m1,0,2,0);
         m1=jml_matrix_set(m1,1,0,-5);	m1=jml_matrix_set(m1,1,1,9);	m1=jml_matrix_set(m1,1,2,0);
         m1=jml_matrix_set(m1,2,0,-2);	m1=jml_matrix_set(m1,2,1,15);	m1=jml_matrix_set(m1,2,2,0);
-        jml_matrix* m2=jml_matrix_inverse(m1);
+        jml_matrix* m2=jml_matrix_inverse(NULL,m1);
         
         jml_matrix* m4=jml_matrix_multiply(m1,m2);
         
@@ -44,7 +44,7 @@ int main()
         m1=jml_matrix_set(m1,0,0,5);	m1=jml_matrix_set(m1,0,1,3);	m1=jml_matrix_set(m1,0,2,1);
         m1=jml_matrix_set(m1,1,0,1);	m1=jml_matrix_set(m1,1,1,-3);	m1=jml_matrix_set(m1,1,2,-2);
         m1=jml_matrix_set(m1,2,0,-5);	m1=jml_matrix_set(m1,2,1,2);	m1=jml_matrix_set(m1,2,2,1);
-        jml_matrix* m2=jml_matrix_inverse(m1);
+        jml_matrix* m2=jml_matrix_inverse(NULL,m1);
         
         jml_matrix* m4=jml_matrix_multiply(m1,m2);
         
@@ -55,6 +55,60 @@ int main()
         m1=jml_matrix_free(m1);
         m2=jml_matrix_free(m2);
         m4=jml_matrix_free(m4);
+    }
+//A*B=C
+//B=A^-1*C
+    {
+        jml_matrix* A=jml_matrix_new(3,3);
+        A=jml_matrix_set(A,0,0,5);	A=jml_matrix_set(A,0,1,3);	A=jml_matrix_set(A,0,2,1);
+        A=jml_matrix_set(A,1,0,1);	A=jml_matrix_set(A,1,1,-3);	A=jml_matrix_set(A,1,2,-2);
+        A=jml_matrix_set(A,2,0,-5);	A=jml_matrix_set(A,2,1,2);	A=jml_matrix_set(A,2,2,1);
+        jml_matrix* C=jml_matrix_new(3,3);
+        C=jml_matrix_set(C,0,0,1);	C=jml_matrix_set(C,0,1,-1);	C=jml_matrix_set(C,0,2,-1);
+        C=jml_matrix_set(C,1,0,-3);	C=jml_matrix_set(C,1,1,2);	C=jml_matrix_set(C,1,2,1);
+        C=jml_matrix_set(C,2,0,2);	C=jml_matrix_set(C,2,1,0);	C=jml_matrix_set(C,2,2,1);
+ 
+
+        jml_matrix* B=jml_matrix_inverse(jml_matrix_copy(C),A);
+        
+        jml_matrix* AB=jml_matrix_multiply(A,B);
+        
+        jml_matrix_view(A);
+        jml_matrix_view(B);
+        jml_matrix_view(C);
+        jml_matrix_view(AB);
+        
+        A=jml_matrix_free(A);
+        B=jml_matrix_free(B);
+        C=jml_matrix_free(C);
+        AB=jml_matrix_free(AB);
+    }
+//A*X=B
+//X=A^-1*B
+    {
+        jml_matrix* A=jml_matrix_new(3,3);
+        A=jml_matrix_set(A,0,0,2);	A=jml_matrix_set(A,0,1,1);	A=jml_matrix_set(A,0,2,-1);
+        A=jml_matrix_set(A,1,0,1);	A=jml_matrix_set(A,1,1,1);	A=jml_matrix_set(A,1,2,0);
+        A=jml_matrix_set(A,2,0,1);	A=jml_matrix_set(A,2,1,-1);	A=jml_matrix_set(A,2,2,1);
+        jml_matrix* B=jml_matrix_new(3,2);
+        B=jml_matrix_set(B,0,0,1);	B=jml_matrix_set(B,0,1,4);
+        B=jml_matrix_set(B,1,0,-2);	B=jml_matrix_set(B,1,1,3);
+        B=jml_matrix_set(B,2,0,3);	B=jml_matrix_set(B,2,1,2);
+ 
+
+        jml_matrix* X=jml_matrix_inverse(jml_matrix_copy(B),A);
+        
+        jml_matrix* AX=jml_matrix_multiply(A,X);
+        
+        jml_matrix_view(A);
+        jml_matrix_view(X);
+        jml_matrix_view(B);
+        jml_matrix_view(AX);
+        
+        A=jml_matrix_free(A);
+        X=jml_matrix_free(X);
+        B=jml_matrix_free(B);
+        AX=jml_matrix_free(AX);
     }
 	pchars("--------------------------------" __FILE__ "--------------------------------\n");
 	jml_start();
