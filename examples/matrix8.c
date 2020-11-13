@@ -11,16 +11,22 @@ int main()
         m1=jml_matrix_set(m1,1,0,-3);	m1=jml_matrix_set(m1,1,1,2);	m1=jml_matrix_set(m1,1,2,1);
         m1=jml_matrix_set(m1,2,0,2);	m1=jml_matrix_set(m1,2,1,0);	m1=jml_matrix_set(m1,2,2,1);
         jml_matrix* m2=jml_matrix_inverse(NULL,m1);
+        jml_matrix* m3=jml_matrix_inverse_by_row(NULL,m1);
         
         jml_matrix* m4=jml_matrix_multiply(m1,m2);
+        jml_matrix* m5=jml_matrix_multiply(m1,m3);
         
-//      jml_matrix_view(m1);
+        jml_matrix_view(m1);
         jml_matrix_view(m2);
+        jml_matrix_view(m3);
         jml_matrix_view(m4);
+        jml_matrix_view(m5);
         
         m1=jml_matrix_free(m1);
         m2=jml_matrix_free(m2);
+        m3=jml_matrix_free(m3);
         m4=jml_matrix_free(m4);
+        m5=jml_matrix_free(m5);
     }
     {
         jml_matrix* m1=jml_matrix_new(3,3);
@@ -109,6 +115,31 @@ int main()
         X=jml_matrix_free(X);
         B=jml_matrix_free(B);
         AX=jml_matrix_free(AX);
+    }
+//X*B=F
+//X=F*B^-1
+    {
+        jml_matrix* F=jml_matrix_new(2,3);
+        F=jml_matrix_set(F,0,0,2);	F=jml_matrix_set(F,0,1,9);	F=jml_matrix_set(F,0,2,-4);
+        F=jml_matrix_set(F,1,0,-1);	F=jml_matrix_set(F,1,1,-7);	F=jml_matrix_set(F,1,2,3);
+        jml_matrix* B=jml_matrix_new(3,3);
+        B=jml_matrix_set(B,0,0,0);	B=jml_matrix_set(B,0,1,3);	B=jml_matrix_set(B,0,2,8);
+        B=jml_matrix_set(B,1,0,2);	B=jml_matrix_set(B,1,1,5);	B=jml_matrix_set(B,1,2,1);
+        B=jml_matrix_set(B,2,0,1);	B=jml_matrix_set(B,2,1,3);	B=jml_matrix_set(B,2,2,2);
+
+        jml_matrix* X=jml_matrix_inverse_by_row(jml_matrix_copy(F),B);
+        
+        jml_matrix* XB=jml_matrix_multiply(X,B);
+        
+        jml_matrix_view(F);
+        jml_matrix_view(B);
+        jml_matrix_view(X);
+        jml_matrix_view(XB);
+        
+        F=jml_matrix_free(F);
+        B=jml_matrix_free(B);
+        X=jml_matrix_free(X);
+        XB=jml_matrix_free(XB);
     }
 	pchars("--------------------------------" __FILE__ "--------------------------------\n");
 	jml_start();

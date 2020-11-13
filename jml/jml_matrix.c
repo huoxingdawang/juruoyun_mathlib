@@ -364,9 +364,10 @@ jml_matrix *jml_matrix_inverse(jml_matrix* E,jml_matrix* A)
     jml_matrix * e;
     if(E) E=jml_matrix_extend_to(E,0,0,0,&e);
     else  E=e=jml_matrix_newE(a->line);
+	if(a->line!=e->line)jbl_exception("INVERSE NOT EQUAL LINE  MATRIX");
 	for(jml_matrix_size_type i=0,j=0;i<a->line;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
 	{		
-		for(j=i;j<a->line&&i<a->row&&!_d(a,j,i);++j);
+		for(j=i;j<a->line&&!_d(a,j,i);++j);
 		if(j>=a->line)continue;
 		if(i!=j)a=jml_matrix_swap_line(a,i,j),e=jml_matrix_swap_line(e,i,j);
 		for(jml_matrix_size_type k=i+1;k<a->line;++k)
@@ -375,12 +376,7 @@ jml_matrix *jml_matrix_inverse(jml_matrix* E,jml_matrix* A)
 	}
     for(jml_matrix_size_type i=0;i<a->line;++i)
     {
-        if(!_d(a,i,i))
-        {
-            a=jml_matrix_free(a);
-            E=jml_matrix_free(E);
-            return NULL;
-        }
+        if(!_d(a,i,i))return a=jml_matrix_free(a),E=jml_matrix_free(E);
         e=jml_matrix_multiply_line(e,i,1/_d(a,i,i)),
         a=jml_matrix_multiply_line(a,i,1/_d(a,i,i));
 	}
@@ -389,6 +385,39 @@ jml_matrix *jml_matrix_inverse(jml_matrix* E,jml_matrix* A)
 		for(jml_matrix_size_type k=i-1;k!=(-1ULL);--k)
 			e=jml_matrix_add_line(e,k,i,-_d(a,k,i)/_d(a,i,i)),
 			a=jml_matrix_add_line(a,k,i,-_d(a,k,i)/_d(a,i,i));        
+    }
+    a=jml_matrix_free(a);
+	return E;	
+}
+jml_matrix *jml_matrix_inverse_by_row(jml_matrix* E,jml_matrix* A)
+{
+	if(!A)return NULL;
+    jml_matrix * a=jml_matrix_copy(jbl_refer_pull(A));
+	if(a->line!=a->row)	jbl_exception("INVERSE NOT SQUARE MATRIX");
+    jml_matrix * e;
+    if(E) E=jml_matrix_extend_to(E,0,0,0,&e);
+    else  E=e=jml_matrix_newE(a->line);
+	if(a->row!=e->row)jbl_exception("INVERSE NOT EQUAL ROW  MATRIX");
+	for(jml_matrix_size_type i=0,j=0;i<a->row;++i)//O(n*(n+n+n*n)+n*n)=O(n^3)
+	{		
+		for(j=i;j<a->row&&!_d(a,i,j);++j);
+		if(j>=a->row)continue;
+		if(i!=j)a=jml_matrix_swap_row(a,i,j),e=jml_matrix_swap_row(e,i,j);
+		for(jml_matrix_size_type k=i+1;k<a->row;++k)
+			e=jml_matrix_add_row(e,k,i,-_d(a,i,k)/_d(a,i,i)),
+			a=jml_matrix_add_row(a,k,i,-_d(a,i,k)/_d(a,i,i));
+	}
+    for(jml_matrix_size_type i=0;i<a->row;++i)
+    {
+        if(!_d(a,i,i))return a=jml_matrix_free(a),E=jml_matrix_free(E);
+        e=jml_matrix_multiply_row(e,i,1/_d(a,i,i)),
+        a=jml_matrix_multiply_row(a,i,1/_d(a,i,i));
+	}
+    for(jml_matrix_size_type i=a->row-1;i!=(-1ULL);--i)
+    {
+		for(jml_matrix_size_type k=i-1;k!=(-1ULL);--k)
+			e=jml_matrix_add_row(e,k,i,-_d(a,i,k)/_d(a,i,i)),
+			a=jml_matrix_add_row(a,k,i,-_d(a,i,k)/_d(a,i,i));        
     }
     a=jml_matrix_free(a);
 	return E;	
