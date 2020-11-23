@@ -15,25 +15,6 @@
 #include "jbl_gc.h"
 #include "jbl_var.h"
 
-typedef struct __jbl_pthread
-{
-	pthread_t thread;
-}jbl_pthread;
-typedef struct __jbl_pthreads
-{
-	jbl_gc 					gc;
-	jbl_var_ops_define		;
-	jbl_pthread_lock_define	;
-	jbl_pthreads_size_type	len;
-	jbl_pthreads_size_type	size;
-	jbl_pthread             threads[];
-}jbl_pthreads;
-jbl_pthreads *   jbl_pthreads_new           (jbl_pthreads_size_type size);
-jbl_pthreads *   jbl_pthreads_free          (jbl_pthreads *this);
-jbl_pthreads *   jbl_pthreads_copy          (jbl_pthreads *that);
-jbl_pthreads *   jbl_pthreads_creat_thread  (jbl_pthreads *this,void *func(void *),jbl_pthreads_size_type n,void * data);
-jbl_pthreads *   jbl_pthreads_wait          (jbl_pthreads *this);
-
 
 #endif
 #endif

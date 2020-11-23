@@ -13,7 +13,7 @@
 #include <signal.h>
 void jbl_signal_callback(int sign)
 {
-    jbl_exit(sign);
+	jbl_exit(0);
 }
 void jbl_start()
 {
@@ -43,23 +43,18 @@ JBL_INLINE jbl_uint64 jbl_min2pow(jbl_uint64 i)
 	for(;j<i;j<<=1);
 	return j;
 }
-double jbl_pow(double a,jbl_uint32 b)
+JBL_INLINE double jbl_pow(double a,jbl_uint8 b)
 {
 	double ans=1;
-	while(b)
-	{
-		if(b&1)ans*=a;
-		a*=a;
-		b>>=1;
-	}
+	while(b--)ans*=a;
 	return ans;
 }
-JBL_INLINE jbl_uint64 jbl_getuint64(jbl_uint8 *s)
+JBL_INLINE jbl_uint32 jbl_getuint64(jbl_uint8 *s)
 {
 	jbl_uint8 c,i=0;
-	jbl_uint64 x;
+	jbl_uint32 x;
 	for(x=0;((c=s[i])<'0'||c>'9')&&s[i];++i);
-	for(x=c-48U,++i;(c=s[i])>='0'&&c<='9'&&s[i];x=(x<<3)+(x<<1)+c-'0',++i);
+	for(x=c-'0',++i;(c=s[i])>='0'&&c<='9'&&s[i];x=(x<<3)+(x<<1)+c-'0',++i);
 	return x;
 }
 jbl_uint8 jbl_errno_table[][53]=

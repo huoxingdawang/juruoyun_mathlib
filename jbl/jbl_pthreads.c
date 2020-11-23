@@ -46,6 +46,7 @@ JBL_INLINE jbl_pthreads *jbl_pthreads_copy(jbl_pthreads *that)
     jbl_pthread_lock_unlock(that);    
 	return that;
 }
+/*
 jbl_pthreads *jbl_pthreads_extend_to(jbl_pthreads *this,jbl_pthreads_size_type size,jbl_uint8 add,jbl_pthreads **pthi)
 {
 	if(!this)
@@ -70,26 +71,33 @@ jbl_pthreads *jbl_pthreads_extend_to(jbl_pthreads *this,jbl_pthreads_size_type s
         else		this=thi;
 	}
     if(pthi)	*pthi=thi;
-    jbl_refer_pull_unlock(this);
+    else         jbl_refer_pull_unlock(this);
     return this;
-}
+}*/
 jbl_pthreads * jbl_pthreads_creat_thread(jbl_pthreads *this,void *func(void *),jbl_pthreads_size_type n,void * data)
 {
-    jbl_pthreads *thi;this=jbl_pthreads_extend_to(this,n,1,&thi);
-    jbl_pthread_lock_wrlock(thi);
+    jbl_pthreads *thi=jbl_refer_pull_wrlock(this);
     for(jbl_pthreads_size_type i=0;i<n;++i)
     {
         if(data)
             pthread_create(&thi->threads[thi->len].thread,NULL,func,data);
         ++thi->len;
     }
-    jbl_pthread_lock_unlock(thi);
+    jbl_refer_pull_unlock(this);
     return this;
+}
+jbl_pthreads * jbl_pthreads_stop(jbl_pthreads *this)
+{
+    jbl_pthreads *thi=jbl_refer_pull_wrlock(this);
+    for(jbl_pthreads_size_type i=0;i<thi->len;++i)
+        pthread_cancel(thi->threads[i].thread),
+        pthread_join(thi->threads[i].thread,NULL);
+    thi->len=0;   
+    jbl_pthread_lock_unlock(thi);
 }
 jbl_pthreads * jbl_pthreads_wait(jbl_pthreads *this)
 {
-    jbl_pthreads *thi;this=jbl_pthreads_extend_to(this,0,1,&thi);
-    jbl_pthread_lock_wrlock(thi);
+    jbl_pthreads *thi=jbl_refer_pull_wrlock(this);
     for(jbl_pthreads_size_type i=0;i<thi->len;++i)
         pthread_join(thi->threads[i].thread,NULL);
     thi->len=0;
