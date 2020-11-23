@@ -56,10 +56,12 @@ jml_matrix *jml_matrix_extend_to(jml_matrix *this,jml_matrix_size_type line,jml_
 	jml_matrix_size_type l=0,r=0;
 	if(small)	flag=1,l=line,r=row;
 	else if(line<=thi->line&&row<=thi->row&&jbl_gc_refcnt(thi)==1)flag=0;
-	else		flag=1,l=jbl_max(line,thi->line),r=jbl_max(line,thi->row);
+	else		flag=1,l=jbl_max(line,thi->line),r=jbl_max(row,thi->row);
 	if(flag)
 	{
 		jml_matrix *tmp=jml_matrix_new(l,r);
+        l=jbl_min(tmp->line,thi->line);
+        r=jbl_min(tmp->row,thi->row);
 		_ff(thi,i,j,l,r)_d(tmp,i,j)=_d(thi,i,j);
 		jml_matrix_free(thi);		
 		thi=tmp;
@@ -78,8 +80,7 @@ jml_matrix_data_type jml_matrix_get(jml_matrix *this,jml_matrix_size_type line,j
 }
 jml_matrix *jml_matrix_set(jml_matrix *this,jml_matrix_size_type line,jml_matrix_size_type row,jml_matrix_data_type v)
 {
-	if(!this)this=jml_matrix_new(line,row);
-	jml_matrix *thi;this=jml_matrix_extend_to(this,0,0,0,&thi);		
+	jml_matrix *thi;this=jml_matrix_extend_to(this,line+1,row+1,0,&thi);		
 	_d(thi,line,row)=v;	
 	return this;
 }
