@@ -9,20 +9,22 @@
 #   See the Mulan PSL v1 for more details.
 #jml
 ifeq ($(system),linux)
-JML_EXLIB = 
+JML_EXLIB =  -lm
 endif
 ifeq ($(system),windows)
 JML_EXLIB = 
 endif
-jml                       :jml/jml_gcd jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
+jml                       :jml/jml_gcd jml/jml_matrix jml/jml_permutation jml/jml_pow jml/jml_vector jml/jml_ying
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
 jml/jml_gcd               :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_gcd.o         jml$(H)jml_gcd.c          $(JML_EXLIB)
 jml/jml_matrix            :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o      jml$(H)jml_matrix.c       $(JML_EXLIB)
-jml/jml_ying              :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o        jml$(H)jml_ying.c         $(JML_EXLIB)
 jml/jml_permutation       :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_permutation.o jml$(H)jml_permutation.c  $(JML_EXLIB)
 jml/jml_pow               :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_pow.o         jml$(H)jml_pow.c          $(JML_EXLIB)
+jml/jml_vector            :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_vector.o      jml$(H)jml_vector.c       $(JML_EXLIB)
+jml/jml_ying              :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o        jml$(H)jml_ying.c         $(JML_EXLIB)

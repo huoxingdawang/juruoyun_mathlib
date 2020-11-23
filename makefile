@@ -36,7 +36,7 @@ ifeq ($(system),macos)
 	rm = rm -f
 	pre = macos_
 endif
-all:jbl jml gcd matrix permutation pow
+all:jbl jml gcd matrix permutation pow vector
 clean:
 	$(rm) tmp$(H)* /s /Q
 	$(rm) exes$(H)* /s /Q
@@ -55,8 +55,11 @@ run:
 	exes$(H)matrix5     &&pause
 	exes$(H)matrix6     &&pause
 	exes$(H)matrix7     &&pause
+	exes$(H)matrix8     &&pause
 	exes$(H)permutation &&pause
 	exes$(H)pow         &&pause
+	exes$(H)vector0     &&pause
+	exes$(H)vector1     &&pause
 
 #examples
 gcd :
@@ -89,6 +92,11 @@ permutation :
 pow :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o                examples$(H)pow.c	
 	$(CC) $(BITS) -o exes$(H)pow               tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+vector :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)vector0.o            examples$(H)vector0.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)vector1.o            examples$(H)vector1.c	
+	$(CC) $(BITS) -o exes$(H)vector0           tmp$(H)$(pre)vector0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)vector1           tmp$(H)$(pre)vector1.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 #   Copyright (c) [2020] juruoyun developer team
 #   Juruoyun basic lib is licensed under the Mulan PSL v1.
 #   You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -116,18 +124,18 @@ jbl/jbl_array          :
 jbl/jbl_base64         :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_base64.o      jbl$(H)jbl_base64.c      $(JBL_EXLIB)
 jbl/jbl_bitset         :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_bitset.o      jbl$(H)jbl_bitset.c      $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_bitset.o      jbl$(H)jbl_bitset.c      $(JBL_EXLIB)
 jbl/jbl_cmd            :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_cmd.o         jbl$(H)jbl_cmd.c         $(JBL_EXLIB)
 jbl/jbl_endian         :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_endian.o      jbl$(H)jbl_endian.c      $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_endian.o      jbl$(H)jbl_endian.c      $(JBL_EXLIB)
 jbl/jbl_exception      :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_exception.o   jbl$(H)jbl_exception.c   $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_exception.o   jbl$(H)jbl_exception.c   $(JBL_EXLIB)
 jbl/jbl_file           :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_file.o        jbl$(H)jbl_file.c        $(JBL_EXLIB)
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_file_ct.o     jbl$(H)jbl_file_ct.c     $(JBL_EXLIB)
 jbl/jbl_gc             :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_gc.o          jbl$(H)jbl_gc.c          $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_gc.o          jbl$(H)jbl_gc.c          $(JBL_EXLIB)
 jbl/jbl_ht             :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_ht.o          jbl$(H)jbl_ht.c          $(JBL_EXLIB)
 jbl/jbl_json           :
@@ -147,14 +155,14 @@ jbl/jbl_ll             :
 jbl/jbl_log             :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_log.o         jbl$(H)jbl_log.c         $(JBL_EXLIB)
 jbl/jbl_malloc         :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_malloc.o      jbl$(H)jbl_malloc.c      $(JBL_EXLIB)
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_malloc_fast.o jbl$(H)jbl_malloc_fast.c $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_malloc.o      jbl$(H)jbl_malloc.c      $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_malloc_fast.o jbl$(H)jbl_malloc_fast.c $(JBL_EXLIB)
 jbl/jbl_md5            :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_md5.o         jbl$(H)jbl_md5.c         $(JBL_EXLIB)
 jbl/jbl_pthread        :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_pthread.o     jbl$(H)jbl_pthread.c     $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_pthread.o     jbl$(H)jbl_pthread.c     $(JBL_EXLIB)
 jbl/jbl_rand           :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_rand.o        jbl$(H)jbl_rand.c        $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_rand.o        jbl$(H)jbl_rand.c        $(JBL_EXLIB)
 jbl/jbl_scanner           :
 ifeq ($(system),linux)
 ifeq ($(findstring jbl,$(complain_re2c)),jbl)
@@ -172,8 +180,8 @@ jbl/jbl_sha1           :
 jbl/jbl_stream         :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_stream.o      jbl$(H)jbl_stream.c      $(JBL_EXLIB)
 jbl/jbl_string         :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_string.o      jbl$(H)jbl_string.c      $(JBL_EXLIB)
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_string_cc.o   jbl$(H)jbl_string_cc.c   $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_string.o      jbl$(H)jbl_string.c      $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_string_cc.o   jbl$(H)jbl_string_cc.c   $(JBL_EXLIB)
 jbl/jbl_time           :
 ifeq ($(system),linux)
 ifeq ($(findstring jbl,$(complain_re2c)),jbl)
@@ -190,7 +198,7 @@ jbl/jbl_var            :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_var.o        jbl$(H)jbl_var.c         $(JBL_EXLIB)
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_var_data.o   jbl$(H)jbl_var_data.c    $(JBL_EXLIB)
 jbl/jbl_ying           :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jbl_ying.o       jbl$(H)jbl_ying.c        $(JBL_EXLIB)
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)jbl_ying.o       jbl$(H)jbl_ying.c        $(JBL_EXLIB)
 #   Copyright (c) [2020] juruoyun developer team
 #  Juruoyun math lib is licensed under the Mulan PSL v1.
 #   You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -202,20 +210,22 @@ jbl/jbl_ying           :
 #   See the Mulan PSL v1 for more details.
 #jml
 ifeq ($(system),linux)
-JML_EXLIB = 
+JML_EXLIB =  -lm
 endif
 ifeq ($(system),windows)
 JML_EXLIB = 
 endif
-jml                       :jml/jml_gcd jml/jml_matrix jml/jml_ying jml/jml_permutation jml/jml_pow
+jml                       :jml/jml_gcd jml/jml_matrix jml/jml_permutation jml/jml_pow jml/jml_vector jml/jml_ying
 	ar  rc tmp$(H)$(pre)jml.a tmp$(H)$(pre)jml_*.o
 jml/jml_gcd               :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_gcd.o         jml$(H)jml_gcd.c          $(JML_EXLIB)
 jml/jml_matrix            :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_matrix.o      jml$(H)jml_matrix.c       $(JML_EXLIB)
-jml/jml_ying              :
-	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o        jml$(H)jml_ying.c         $(JML_EXLIB)
 jml/jml_permutation       :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_permutation.o jml$(H)jml_permutation.c  $(JML_EXLIB)
 jml/jml_pow               :
 	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_pow.o         jml$(H)jml_pow.c          $(JML_EXLIB)
+jml/jml_vector            :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_vector.o      jml$(H)jml_vector.c       $(JML_EXLIB)
+jml/jml_ying              :
+	$(CC) $(BITS) -c -Wall -Wextra -Wconversion -o tmp$(H)$(pre)jml_ying.o        jml$(H)jml_ying.c         $(JML_EXLIB)

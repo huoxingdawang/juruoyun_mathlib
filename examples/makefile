@@ -36,7 +36,7 @@ ifeq ($(system),macos)
 	rm = rm -f
 	pre = macos_
 endif
-all:jbl jml gcd matrix permutation pow
+all:jbl jml gcd matrix permutation pow vector
 clean:
 	$(rm) tmp$(H)* /s /Q
 	$(rm) exes$(H)* /s /Q
@@ -55,8 +55,11 @@ run:
 	exes$(H)matrix5     &&pause
 	exes$(H)matrix6     &&pause
 	exes$(H)matrix7     &&pause
+	exes$(H)matrix8     &&pause
 	exes$(H)permutation &&pause
 	exes$(H)pow         &&pause
+	exes$(H)vector0     &&pause
+	exes$(H)vector1     &&pause
 
 #examples
 gcd :
@@ -89,3 +92,8 @@ permutation :
 pow :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)pow.o                examples$(H)pow.c	
 	$(CC) $(BITS) -o exes$(H)pow               tmp$(H)$(pre)pow.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+vector :
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)vector0.o            examples$(H)vector0.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)vector1.o            examples$(H)vector1.c	
+	$(CC) $(BITS) -o exes$(H)vector0           tmp$(H)$(pre)vector0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)vector1           tmp$(H)$(pre)vector1.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)

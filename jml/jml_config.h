@@ -15,6 +15,7 @@
 #define JML_GCD_ENABLE			1	//need 
 #define JML_MATRIX_ENABLE		1	//need 
 #define JML_POW_ENABLE			1	//need 
+#define JML_VECTOR_ENABLE   	1	//need 
 #define JML_MATRIX_ENABLE		1	//need 
 #define JML_YING_ENABLE			1	//need 
 
