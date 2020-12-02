@@ -164,8 +164,8 @@ double jml_vector_get_theta(jml_vector* A,jml_vector* B)
 	return acos((double)ans/sqrt((double)t1)/sqrt((double)t2));
 }
 #if JML_MATRIX_ENABLE==1
-#define _md(this,l,r)		(*(this->data+l*this->row+r))
-jml_matrix *jml_vector_lay_line(jml_matrix_size_type m,jml_vector * v[])
+#define _md(this,r,c)		(*(this->data+r*this->column+c))
+jml_matrix *jml_vector_lay_row(jml_matrix_size_type m,jml_vector * v[])
 {
     if(!v)return NULL;
     jml_vector * vv;
@@ -174,7 +174,7 @@ jml_matrix *jml_vector_lay_line(jml_matrix_size_type m,jml_vector * v[])
     for(jml_matrix_size_type i=0;i<m;++i)
     {
         vv=jbl_refer_pull(v[i]);
-        if(m1->row!=vv->n)
+        if(m1->column!=vv->n)
         {
             m1=jml_matrix_free(m1);
             jbl_exception("VECTOR OVREFLOW");
@@ -183,7 +183,7 @@ jml_matrix *jml_vector_lay_line(jml_matrix_size_type m,jml_vector * v[])
     }
     return m1;
 }
-jml_matrix *jml_vector_lay_row(jml_matrix_size_type m,jml_vector * v[])
+jml_matrix *jml_vector_lay_column(jml_matrix_size_type m,jml_vector * v[])
 {
     if(!v)return NULL;
     jml_vector * vv;
@@ -192,7 +192,7 @@ jml_matrix *jml_vector_lay_row(jml_matrix_size_type m,jml_vector * v[])
     for(jml_matrix_size_type i=0;i<m;++i)
     {
         vv=jbl_refer_pull(v[i]);
-        if(m1->line!=vv->n)
+        if(m1->row!=vv->n)
         {
             m1=jml_matrix_free(m1);
             jbl_exception("VECTOR OVREFLOW");
@@ -204,9 +204,9 @@ jml_matrix *jml_vector_lay_row(jml_matrix_size_type m,jml_vector * v[])
 #endif
 
 #if JBL_STREAM_ENABLE==1
-jml_vector* jml_vector_view_put(jml_vector* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 line,unsigned char * varname,unsigned char * func,unsigned char * file)
+jml_vector* jml_vector_view_put(jml_vector* this,jbl_stream *out,jbl_uint8 format,jbl_uint32 tabs,jbl_uint32 row,unsigned char * varname,unsigned char * func,unsigned char * file)
 {
-	jml_vector *thi;if(jbl_stream_view_put_format(thi=jbl_refer_pull(this),out,format,tabs,UC"jml_vector",line,varname,func,file)){jbl_stream_push_char(out,'\n');return this;}
+	jml_vector *thi;if(jbl_stream_view_put_format(thi=jbl_refer_pull(this),out,format,tabs,UC"jml_vector",row,varname,func,file)){jbl_stream_push_char(out,'\n');return this;}
 	jbl_stream_push_chars(out,UC" n:");jbl_stream_push_uint(out,thi->n);
 	jbl_stream_push_char(out,'\n');
 	++tabs;

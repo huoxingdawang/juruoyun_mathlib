@@ -56,6 +56,7 @@ run:
 	exes$(H)matrix6     &&pause
 	exes$(H)matrix7     &&pause
 	exes$(H)matrix8     &&pause
+	exes$(H)matrix9     &&pause
 	exes$(H)permutation &&pause
 	exes$(H)pow         &&pause
 	exes$(H)vector0     &&pause
@@ -75,6 +76,7 @@ matrix :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix6.o            examples$(H)matrix6.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix7.o            examples$(H)matrix7.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix8.o            examples$(H)matrix8.c	
+	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix9.o            examples$(H)matrix9.c	
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)matrix_benchmark0.o  examples$(H)matrix_benchmark0.c	
 	$(CC) $(BITS) -o exes$(H)matrix0           tmp$(H)$(pre)matrix0.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix1           tmp$(H)$(pre)matrix1.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
@@ -85,6 +87,7 @@ matrix :
 	$(CC) $(BITS) -o exes$(H)matrix6           tmp$(H)$(pre)matrix6.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix7           tmp$(H)$(pre)matrix7.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix8           tmp$(H)$(pre)matrix8.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
+	$(CC) $(BITS) -o exes$(H)matrix9           tmp$(H)$(pre)matrix9.o           tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 	$(CC) $(BITS) -o exes$(H)matrix_benchmark0 tmp$(H)$(pre)matrix_benchmark0.o tmp$(H)$(pre)jml.a tmp$(H)$(pre)jbl.a $(EXLIB)
 permutation :
 	$(CC) $(BITS) -c -Wall -o tmp$(H)$(pre)permutation.o        examples$(H)permutation.c	

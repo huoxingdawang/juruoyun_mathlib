@@ -39,8 +39,8 @@ jml_vector *		    jml_vector_get_E                (jml_vector* A);              
 double      		    jml_vector_get_theta            (jml_vector* A,jml_vector* B);                                      //向量求角
 
 #if JML_MATRIX_ENABLE==1
-jml_matrix *			jml_vector_lay_line				(jml_matrix_size_type m,jml_vector * v[]);			                //m个向量行摆成矩阵
-jml_matrix *			jml_vector_lay_row				(jml_matrix_size_type m,jml_vector * v[]);			                //m个向量列摆成矩阵
+jml_matrix *			jml_vector_lay_row				(jml_matrix_size_type m,jml_vector * v[]);			                //m个向量行摆成矩阵
+jml_matrix *			jml_vector_lay_column			(jml_matrix_size_type m,jml_vector * v[]);			                //m个向量列摆成矩阵
 #endif
 
 #if JBL_STREAM_ENABLE==1
